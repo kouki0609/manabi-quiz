@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Portal — 資格＆受験まとめ</title>
+<meta name="description" content="6つの一問一答アプリを1か所に集約。FP3級・簿記3級・ITパスポート・G検定・SPI・大学受験まで、合計720問。スキマ時間にサクッと学習。">
+<style>
+  :root {
+    --bg: #0b0f1e;
+    --card: #1a1f33;
+    --card-hover: #232847;
+    --text: #e5e7eb;
+    --sub: #94a3b8;
+    --border: #2d3654;
+    --accent: #60a5fa;
+    --accent2: #818cf8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* 装飾的な背景 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(800px 500px at 10% -10%, rgba(96,165,250,0.10), transparent 60%),
+      radial-gradient(700px 400px at 90% 110%, rgba(129,140,248,0.10), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ── Hero ── */
+  .hero { text-align: center; padding: 40px 0 32px; }
+  .hero .badge {
+    display: inline-block;
+    font-size: 11px; letter-spacing: .25em;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 999px;
+    padding: 4px 14px; margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .hero p { color: var(--sub); font-size: 0.95rem; max-width: 600px; margin: 0 auto 24px; }
+  .stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-top: 8px; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.75rem; color: var(--sub); letter-spacing: .1em; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 0.75rem; letter-spacing: .3em; color: var(--accent2);
+    margin: 40px 0 14px; padding-left: 4px; font-weight: 700;
+  }
+
+  /* ── Card grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s, border-color .2s, background .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--card-hover);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-card, #60a5fa), var(--accent-card2, #818cf8));
+  }
+  .card .icon { font-size: 2.2rem; }
+  .card .title { font-size: 1.1rem; font-weight: 700; }
+  .card .desc { font-size: 0.85rem; color: var(--sub); flex: 1; }
+  .card .meta {
+    display: flex; gap: 12px; font-size: 0.75rem;
+    color: var(--sub); padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .card .meta strong { color: var(--text); font-weight: 600; }
+  .card .arrow {
+    position: absolute;
+    bottom: 22px; right: 20px;
+    color: var(--accent);
+    font-size: 1.2rem;
+    transition: transform .2s;
+  }
+  .card:hover .arrow { transform: translateX(4px); }
+
+  /* カードごとのアクセントカラー */
+  .card-fp { --accent-card: #f59e0b; --accent-card2: #fbbf24; }
+  .card-bk { --accent-card: #14b8a6; --accent-card2: #2dd4bf; }
+  .card-it { --accent-card: #a855f7; --accent-card2: #c084fc; }
+  .card-g  { --accent-card: #22c55e; --accent-card2: #4ade80; }
+  .card-spi{ --accent-card: #ef4444; --accent-card2: #f87171; }
+  .card-uni{ --accent-card: #3b82f6; --accent-card2: #60a5fa; }
+  .card-shi{ --accent-card: #8b5cf6; --accent-card2: #a78bfa; }
+  .card-tak{ --accent-card: #10b981; --accent-card2: #34d399; }
+  .card-fe { --accent-card: #6366f1; --accent-card2: #818cf8; }
+  .card-toeic{ --accent-card: #06b6d4; --accent-card2: #22d3ee; }
+  .card-kiken{ --accent-card: #f97316; --accent-card2: #fb923c; }
+  .card-ap { --accent-card: #3b82f6; --accent-card2: #60a5fa; }
+  .card-stat{ --accent-card: #a855f7; --accent-card2: #c084fc; }
+  .card-gyo{ --accent-card: #eab308; --accent-card2: #facc15; }
+  .card-aws{ --accent-card: #f97316; --accent-card2: #fb923c; }
+  .card-sho{ --accent-card: #16a34a; --accent-card2: #22c55e; }
+  .card-keiei{ --accent-card: #0ea5e9; --accent-card2: #38bdf8; }
+  .card-koumu{ --accent-card: #dc2626; --accent-card2: #f87171; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid var(--border); color: var(--sub); font-size: 0.78rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* レスポンシブ */
+  @media (max-width: 600px) {
+    .stats { gap: 18px; }
+    .stat-num { font-size: 1.3rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="badge">STUDY PORTAL</div>
+    <h1>スキマ時間で<br>資格と受験を一気に。</h1>
+    <p>
+      FP3級・簿記3級・ITパスポート・G検定・SPI・大学受験まで、
+      6つの一問一答を1か所に集約。スマホひとつで通学・通勤の合間にトレーニング。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">20</div><div class="stat-label">CATEGORIES</div></div>
+      <div class="stat"><div class="stat-num">1315</div><div class="stat-label">QUESTIONS</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">FREE</div></div>
+    </div>
+  </header>
+
+  <!-- ── ビジネス・経営 ── -->
+  <p class="section-title">💼 ビジネス・経営</p>
+  <div class="grid">
+    <a href="https://fp-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fp">
+      <div class="icon">📊</div>
+      <div class="title">FP3級</div>
+      <div class="desc">ライフプラン・保険・資産運用・税金・不動産・相続。お金まわり全般の基礎。</div>
+      <div class="meta"><span><strong>120問</strong></span><span>6カテゴリ</span><span>初学者向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://bookkeeping-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk">
+      <div class="icon">📒</div>
+      <div class="title">簿記3級</div>
+      <div class="desc">仕訳・勘定科目・財務諸表・決算処理。経理の基礎を一問一答で。</div>
+      <div class="meta"><span><strong>100問</strong></span><span>5カテゴリ</span><span>初学者向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://boki2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk">
+      <div class="icon">📕</div>
+      <div class="title">簿記2級</div>
+      <div class="desc">商業簿記・工業簿記。3級からのステップアップに。</div>
+      <div class="meta"><span><strong>50問</strong></span><span>中級</span><span>就活アピール</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://boki1-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk">
+      <div class="icon">📚</div>
+      <div class="title">簿記1級</div>
+      <div class="desc">連結会計・原価計算・税効果会計。最高峰の簿記資格。</div>
+      <div class="meta"><span><strong>35問</strong></span><span>上級</span><span>会計プロ向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://shindanshi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-shi">
+      <div class="icon">📈</div>
+      <div class="title">中小企業診断士</div>
+      <div class="desc">経済学・財務会計・経営理論・運営管理・経営法務。経営コンサルの登竜門。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>5科目</span><span>経営学部向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://takken-drill.vercel.app" target="_blank" rel="noopener" class="card card-tak">
+      <div class="icon">🏘️</div>
+      <div class="title">宅建士</div>
+      <div class="desc">権利関係・宅建業法・法令制限・税。不動産・金融業界で重宝される国家資格。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>不動産系志望</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://gyousei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-gyo">
+      <div class="icon">⚖️</div>
+      <div class="title">行政書士</div>
+      <div class="desc">民法・行政法・憲法・商法。独立開業も可能な人気の国家資格。</div>
+      <div class="meta"><span><strong>50問</strong></span><span>4分野</span><span>独立志向</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://shoken2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-sho">
+      <div class="icon">📈</div>
+      <div class="title">証券外務員2種</div>
+      <div class="desc">金融商品・法令・経済。金融業界・投資の基礎を体系的に。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>投資・金融志望</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://keiei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-keiei">
+      <div class="icon">🏢</div>
+      <div class="title">経営学検定</div>
+      <div class="desc">マネジメント・戦略・組織・会計。経営学部の基礎を一問一答で総ざらい。</div>
+      <div class="meta"><span><strong>50問</strong></span><span>4区分</span><span>経営学部直球</span></div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ── IT・AI ── -->
+  <p class="section-title">💻 IT・AI</p>
+  <div class="grid">
+    <a href="https://it-passport-quiz.vercel.app" target="_blank" rel="noopener" class="card card-it">
+      <div class="icon">🖥️</div>
+      <div class="title">ITパスポート</div>
+      <div class="desc">ストラテジ・マネジメント・テクノロジ。社会人なら知っておきたいIT基礎。</div>
+      <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>新社会人向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://kihonjouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fe">
+      <div class="icon">⚙️</div>
+      <div class="title">基本情報技術者</div>
+      <div class="desc">ITパスポートの上位。エンジニア入門の登竜門、3区分から出題。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>IT就職向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://oyojouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-ap">
+      <div class="icon">🧠</div>
+      <div class="title">応用情報技術者</div>
+      <div class="desc">基本情報の上位資格。テクノロジ・マネジメント・ストラテジを横断的に。</div>
+      <div class="meta"><span><strong>50問</strong></span><span>3区分</span><span>IT中級向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://aws-clf-quiz-pi.vercel.app" target="_blank" rel="noopener" class="card card-aws">
+      <div class="icon">☁️</div>
+      <div class="title">AWS Cloud Practitioner</div>
+      <div class="desc">AWS基礎・クラウド入門。IT系副業・インフラ就職で武器になる。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>クラウド入門</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://g-quiz-seven.vercel.app" target="_blank" rel="noopener" class="card card-g">
+      <div class="icon">🤖</div>
+      <div class="title">G検定</div>
+      <div class="desc">数学・統計、機械学習、ディープラーニング、AI倫理。AI時代の基礎教養。</div>
+      <div class="meta"><span><strong>100問</strong></span><span>5分野</span><span>AI入門者向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://toukei3-quiz.vercel.app" target="_blank" rel="noopener" class="card card-stat">
+      <div class="icon">📊</div>
+      <div class="title">統計検定3級</div>
+      <div class="desc">記述統計・確率・推測統計。データ分析・経営学・AIの土台になる必修知識。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>3分野</span><span>データ分析入門</span></div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ── 語学 ── -->
+  <p class="section-title">🌐 語学</p>
+  <div class="grid">
+    <a href="https://toeic-drill.vercel.app" target="_blank" rel="noopener" class="card card-toeic">
+      <div class="icon">🌐</div>
+      <div class="title">TOEIC</div>
+      <div class="desc">単語・文法・短文読解・リスニング基礎。就活と昇進で必須の英語スコア。</div>
+      <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>就活・昇進</span></div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ── 国家資格 ── -->
+  <p class="section-title">🏛️ 国家資格（その他）</p>
+  <div class="grid">
+    <a href="https://kikenbutu-quiz.vercel.app" target="_blank" rel="noopener" class="card card-kiken">
+      <div class="icon">⛽</div>
+      <div class="title">危険物乙4</div>
+      <div class="desc">法令・物理化学・性質と消火。ガソリンスタンドで必須の国家資格。</div>
+      <div class="meta"><span><strong>30問</strong></span><span>3分野</span><span>就職に有利</span></div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ── 就活・受験 ── -->
+  <p class="section-title">🎓 就活・受験</p>
+  <div class="grid">
+    <a href="https://spi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-spi">
+      <div class="icon">📝</div>
+      <div class="title">SPI</div>
+      <div class="desc">言語・非言語・性格適性。新卒就活で最頻出の適性検査対策。</div>
+      <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>就活生向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://daigaku-quiz.vercel.app" target="_blank" rel="noopener" class="card card-uni">
+      <div class="icon">🎓</div>
+      <div class="title">大学受験</div>
+      <div class="desc">英語・数学・国語・理科基礎・社会。共通テスト基礎レベルを5教科横断で。</div>
+      <div class="meta"><span><strong>200問</strong></span><span>5教科</span><span>高校生向け</span></div>
+      <span class="arrow">→</span>
+    </a>
+
+    <a href="https://koumuin-quiz.vercel.app" target="_blank" rel="noopener" class="card card-koumu">
+      <div class="icon">🏛️</div>
+      <div class="title">公務員試験 一般教養</div>
+      <div class="desc">数的処理・文章理解・社会・人文・自然。就活保険にも使える教養対策。</div>
+      <div class="meta"><span><strong>50問</strong></span><span>5区分</span><span>就活・公務員志望</span></div>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <footer>
+    <p>© 2026 Study Portal. すべて無料で公開中。</p>
+    <p style="margin-top:6px;">不具合のご報告・問題の追加リクエストはお気軽に。</p>
+  </footer>
+
+</div>
+</body>
+</html>
