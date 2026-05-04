@@ -1,36 +1,103 @@
-name: Claude Code
+name: Claude Code (App-less)
 
 on:
+  issues:
+    types: [opened, reopened, edited]
   issue_comment:
     types: [created]
-  pull_request_review_comment:
-    types: [created]
-  issues:
-    types: [opened, assigned]
-  pull_request_review:
-    types: [submitted]
 
 jobs:
   claude:
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      (github.event_name == 'issues' && contains(github.event.issue.body, '@claude')) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       issues: write
-      id-token: write
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
-      - name: Run Claude Code
-        id: claude
-        uses: anthropics/claude-code-action@v1
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          node-version: 20
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Acknowledge issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUM="${{ github.event.issue.number }}"
+          curl -s -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUM}/comments" \
+            -d '{"body":"🤖 Claude が作業を開始しました。完了したらPRリンクをここにコメントします。"}'
+
+      - name: Run Claude on issue request
+        id: claude_run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ISSUE_TITLE='${{ github.event.issue.title }}'
+          ISSUE_BODY=$(cat <<'EOF'
+          ${{ github.event.issue.body || github.event.comment.body }}
+          EOF
+          )
+          BRANCH="claude/issue-${{ github.event.issue.number }}-$(date +%s)"
+          git config user.email "claude@anthropic.com"
+          git config user.name "Claude Code Bot"
+          git checkout -b "$BRANCH"
+
+          echo "$ISSUE_BODY" | claude -p "以下のIssue要望を読んで、このリポジトリのコードを実際に編集して要望を実装してください。@claude タグは無視してOK。Issue: $ISSUE_TITLE" \
+            --dangerously-skip-permissions \
+            --allowed-tools "Read,Edit,Write,Bash,Glob,Grep" \
+            2>&1 | tee /tmp/claude_output.txt
+
+          if git diff --quiet HEAD; then
+            echo "no_changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          git add -A
+          git commit -m "feat: implement issue #${{ github.event.issue.number }} via Claude"
+          git push origin "$BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.claude_run.outputs.branch != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ steps.claude_run.outputs.branch }}"
+          ISSUE_NUM="${{ github.event.issue.number }}"
+          PR_BODY=$(printf '🤖 Issue #%s の要望をClaudeが自動実装しました。\n\nCloses #%s' "$ISSUE_NUM" "$ISSUE_NUM")
+          PR_RESP=$(curl -s -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls" \
+            -d "$(jq -n --arg t "Claude: Issue #$ISSUE_NUM 自動実装" --arg b "$PR_BODY" --arg h "$BRANCH" '{title:$t, body:$b, head:$h, base:"main"}')")
+          PR_URL=$(echo "$PR_RESP" | jq -r '.html_url')
+          curl -s -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUM}/comments" \
+            -d "$(jq -n --arg b "✅ 実装完了。PRはこちら → $PR_URL" '{body:$b}')"
+
+      - name: Report no changes
+        if: steps.claude_run.outputs.no_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUM="${{ github.event.issue.number }}"
+          curl -s -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUM}/comments" \
+            -d '{"body":"⚠️ Claudeはコードを変更しませんでした（要件が不明瞭/コード生成されず）。Issue文を具体化してください。"}'
