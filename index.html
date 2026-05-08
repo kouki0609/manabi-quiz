@@ -1,856 +1,1442 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="dark">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Study Portal — 資格＆受験まとめ</title>
-<meta name="description" content="20の一問一答アプリを1か所に集約。FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで、合計1,315問。スキマ時間にサクッと学習。">
-<meta name="theme-color" content="#0b0f1e">
+<title>manabi-quiz | 18コース・1,215問の資格学習サイト【無料・登録不要】</title>
+<meta name="description" content="FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで18コース・1,215問。 高校生・大学生のための資格学習サイト。 完全無料・会員登録不要・スキマ時間で学べる。">
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:title" content="manabi-quiz | 18コース・1,215問の資格学習サイト">
+<meta property="og:description" content="FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで全部無料。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230066FF'/%3E%3Ctext x='50' y='70' font-size='56' text-anchor='middle' font-family='-apple-system,sans-serif' font-weight='800' fill='white'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0b0f1e;
-    --bg-elev: #11162a;
-    --card: #1a1f33;
-    --card-hover: #232847;
-    --text: #e5e7eb;
-    --sub: #94a3b8;
-    --border: #2d3654;
-    --accent: #60a5fa;
-    --accent2: #818cf8;
-    --shadow: 0 6px 24px -10px rgba(0,0,0,0.6);
-    --radius: 16px;
+    --white:    #FFFFFF;
+    --gray-50:  #FAFBFC;
+    --gray-100: #F2F4F7;
+    --gray-200: #E5E8EC;
+    --gray-300: #D0D5DD;
+    --gray-400: #98A2B3;
+    --gray-500: #5A6068;
+    --gray-700: #344054;
+    --ink:      #101828;
+    --blue:     #0066FF;
+    --blue-d:   #0050CC;
+    --blue-l:   #E6F0FF;
+    --green:    #12B76A;
+    --orange:   #FF7A00;
+    --red:      #F04438;
+    --shadow-sm: 0 1px 2px rgba(16,24,40,0.05);
+    --shadow:    0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06);
+    --shadow-lg: 0 12px 24px -8px rgba(16,24,40,0.12), 0 4px 8px -4px rgba(16,24,40,0.08);
   }
-  /* ライトテーマ */
-  html[data-theme="light"] {
-    --bg: #f8fafc;
-    --bg-elev: #ffffff;
-    --card: #ffffff;
-    --card-hover: #f1f5f9;
-    --text: #0f172a;
-    --sub: #64748b;
-    --border: #e2e8f0;
-    --accent: #2563eb;
-    --accent2: #6366f1;
-    --shadow: 0 4px 16px -8px rgba(15,23,42,0.18);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
-    min-height: 100vh;
-    line-height: 1.65;
-    transition: background .25s, color .25s;
-    padding-bottom: env(safe-area-inset-bottom);
+    font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    line-height: 1.6;
+    font-feature-settings: "palt", "ss01";
   }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(800px 500px at 10% -10%, rgba(96,165,250,0.10), transparent 60%),
-      radial-gradient(700px 400px at 90% 110%, rgba(129,140,248,0.10), transparent 60%);
-    pointer-events: none; z-index: -1;
-  }
-  html[data-theme="light"] body::before {
-    background:
-      radial-gradient(800px 500px at 10% -10%, rgba(37,99,235,0.07), transparent 60%),
-      radial-gradient(700px 400px at 90% 110%, rgba(99,102,241,0.07), transparent 60%);
-  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
 
-  .container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 80px; }
+  /* ヘッダー */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
+  .nav-logo .mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--blue);
+    color: white; display: grid; place-items: center;
+    font-size: 18px; font-weight: 800;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    font-size: 14px; font-weight: 500;
+  }
+  .nav-links a { color: var(--gray-700); transition: color .15s; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta {
+    background: var(--blue);
+    color: var(--white) !important;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background .15s;
+  }
+  .nav-cta:hover { background: var(--blue-d) !important; color: white !important; }
+  @media (max-width: 768px) { .nav-links a:not(.nav-cta) { display: none; } }
 
-  /* ── Hero ── */
-  .hero { text-align: center; padding: 32px 0 20px; }
-  .hero .badge {
-    display: inline-block;
-    font-size: 11px; letter-spacing: .25em;
-    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 999px;
-    padding: 4px 14px; margin-bottom: 14px;
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  @media (max-width: 768px) { .container { padding: 0 16px; } }
+
+  /* ====== HERO ====== */
+  .hero {
+    padding: 72px 0 56px;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(0,102,255,0.07) 0%, transparent 45%),
+      radial-gradient(circle at 90% 100%, rgba(0,102,255,0.05) 0%, transparent 45%),
+      var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 1024px) { .hero-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-l);
+    color: var(--blue);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .hero-badge::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--blue); border-radius: 50%;
   }
   .hero h1 {
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-size: clamp(40px, 5.6vw, 68px);
     font-weight: 800;
-    background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    line-height: 1.3;
-    margin-bottom: 14px;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 24px;
   }
-  .hero p { color: var(--sub); font-size: 0.92rem; max-width: 600px; margin: 0 auto 18px; }
-  .stats { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-top: 8px; }
-  .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
-  .stat-label { font-size: 0.7rem; color: var(--sub); letter-spacing: .12em; }
+  .hero h1 .accent { color: var(--blue); }
+  .hero h1 .underline { position: relative; display: inline-block; }
+  .hero h1 .underline::after {
+    content: ""; position: absolute;
+    left: 0; right: 0; bottom: 4px;
+    height: 10px; background: rgba(0,102,255,0.18);
+    z-index: -1;
+  }
+  .hero p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--gray-500);
+    margin-bottom: 32px;
+    max-width: 560px;
+  }
+  .hero-ctas {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 1024px) { .hero { text-align: center; } .hero p { margin-left: auto; margin-right: auto; } .hero-ctas { justify-content: center; } }
 
-  /* ── ツールバー（検索 + フィルタ + テーマ） ── */
-  .toolbar {
-    position: sticky; top: 0; z-index: 30;
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    margin: 14px -16px 18px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
+  /* ヒーロー右の人気コースプレビュー */
+  .hero-preview {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 24px 48px -16px rgba(16,24,40,0.12);
+    position: relative;
   }
-  .toolbar-row {
-    display: flex; gap: 8px; align-items: center;
+  .hero-preview::before {
+    content: "TOP 3 受講中";
+    position: absolute; top: -12px; left: 24px;
+    background: var(--blue);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 6px;
   }
-  .search {
-    flex: 1; min-width: 0; position: relative;
+  .hero-preview h4 {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-weight: 600;
+    margin: 8px 0 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
-  .search input {
-    width: 100%;
-    background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 11px 38px 11px 38px;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .search input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
-  }
-  .search-icon {
-    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    color: var(--sub); font-size: 14px; pointer-events: none;
-  }
-  .search-clear {
-    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-    background: transparent; border: 0; color: var(--sub);
-    font-size: 16px; cursor: pointer; padding: 6px 8px; border-radius: 8px;
-    display: none;
-  }
-  .search-clear:hover { background: var(--bg-elev); color: var(--text); }
-  .search-clear.visible { display: inline-flex; align-items: center; }
-  .kbd-hint {
-    display: none; font-size: 10px; color: var(--sub);
-    border: 1px solid var(--border); border-radius: 4px;
-    padding: 1px 6px; font-family: monospace;
-  }
-  @media (min-width: 720px) {
-    .search input { padding-right: 50px; }
-    .kbd-hint { display: inline-flex; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
-    .search input:focus + .search-icon ~ .kbd-hint { display: none; }
-  }
-
-  .icon-btn {
-    background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 10px;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: background .15s, border-color .15s;
-    font-size: 16px; flex-shrink: 0;
-  }
-  .icon-btn:hover { background: var(--card-hover); border-color: var(--accent); }
-  .icon-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  .chips {
-    display: flex; gap: 6px; overflow-x: auto;
-    margin-top: 8px; padding: 2px 0; scrollbar-width: none;
-  }
-  .chips::-webkit-scrollbar { display: none; }
-  .chip {
-    background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 999px;
-    padding: 6px 14px; font-size: 0.8rem; cursor: pointer;
-    white-space: nowrap; transition: background .15s, border-color .15s;
-    user-select: none; flex-shrink: 0;
-  }
-  .chip:hover { background: var(--card-hover); border-color: var(--accent2); }
-  .chip[aria-pressed="true"] {
-    background: var(--accent); color: #fff; border-color: var(--accent);
-  }
-  .chip-count { font-size: 0.7rem; opacity: .75; margin-left: 4px; }
-
-  /* ── Section title ── */
-  .section-title {
-    font-size: 0.75rem; letter-spacing: .3em; color: var(--accent2);
-    margin: 30px 0 12px; padding-left: 4px; font-weight: 700;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-title .count { font-size: 0.65rem; color: var(--sub); letter-spacing: .15em; }
-
-  /* ── Card grid ── */
-  .grid {
+  .preview-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: 36px 1fr auto;
     gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--gray-200);
   }
-  .card {
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 18px 22px;
-    text-decoration: none;
-    color: inherit;
-    transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
-    display: flex; flex-direction: column; gap: 8px;
-    position: relative; overflow: hidden;
-    contain: layout;
+  .preview-row:first-of-type { border-top: none; padding-top: 4px; }
+  .preview-row .rank {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-align: center;
   }
-  .card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    background: var(--card-hover);
+  .preview-row .body { display: flex; flex-direction: column; gap: 2px; }
+  .preview-row .ttl { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .preview-row .meta { font-size: 11px; color: var(--gray-500); font-weight: 500; }
+  .preview-row .arrow { color: var(--gray-400); font-size: 14px; }
+  .preview-row:hover { padding-left: 4px; cursor: pointer; }
+  .preview-row:hover .arrow { color: var(--blue); }
+  .preview-foot {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-200);
+    text-align: center;
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 600;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: background .15s, transform .15s, box-shadow .15s;
     box-shadow: var(--shadow);
+    display: inline-flex; align-items: center; gap: 10px;
   }
-  .card:focus-visible {
-    outline: 2px solid var(--accent); outline-offset: 2px;
+  .btn-primary:hover { background: var(--blue-d); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  .btn-primary::after { content: "→"; transition: transform .15s; }
+  .btn-primary:hover::after { transform: translateX(4px); }
+  .btn-ghost {
+    padding: 16px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    color: var(--ink);
+    border: 1px solid var(--gray-300);
+    background: white;
+    transition: background .15s, border-color .15s;
   }
-  .card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent-card, #60a5fa), var(--accent-card2, #818cf8));
-  }
-  .card .icon { font-size: 2.1rem; line-height: 1; }
-  .card .title { font-size: 1.08rem; font-weight: 700; }
-  .card .desc { font-size: 0.82rem; color: var(--sub); flex: 1; line-height: 1.55; }
-  .card .meta {
-    display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.72rem;
-    color: var(--sub); padding-top: 10px;
-    border-top: 1px solid var(--border);
-  }
-  .card .meta strong { color: var(--text); font-weight: 600; }
-  .card .arrow {
-    position: absolute; bottom: 18px; right: 16px;
-    color: var(--accent); font-size: 1.1rem; transition: transform .2s;
-  }
-  .card:hover .arrow { transform: translateX(4px); }
+  .btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-400); }
 
-  /* お気に入り星 */
-  .fav-btn {
+  .hero-stats {
+    display: flex; gap: 48px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 1024px) { .hero-stats { justify-content: center; } }
+  @media (max-width: 768px) { .hero-stats { gap: 32px; } }
+  .stat-item .v {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-item .v .unit { font-size: 18px; color: var(--gray-500); margin-left: 2px; font-weight: 600; }
+  .stat-item .l {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* ====== 信頼バンド ====== */
+  .trust-band {
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 32px 0;
+  }
+  .trust-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    text-align: center;
+  }
+  @media (max-width: 768px) { .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+  .trust-item .v { font-size: 22px; font-weight: 700; color: var(--ink); }
+  .trust-item .l { font-size: 12px; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
+
+  /* ====== あなたの学習（進捗トラッキング） ====== */
+  .your-progress {
+    background: linear-gradient(180deg, var(--blue-l) 0%, transparent 100%);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 48px 0 56px;
+  }
+  .your-progress[hidden] { display: none; }
+  .yp-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+  }
+  .yp-head h2 {
+    font-size: 24px; font-weight: 800; color: var(--ink);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .yp-head h2::before { content: "🔥"; font-size: 22px; }
+  .yp-clear {
+    background: none; color: var(--gray-500); font-size: 12px;
+    padding: 6px 10px; border-radius: 6px; transition: background .15s;
+  }
+  .yp-clear:hover { background: var(--gray-100); }
+  .yp-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 768px) { .yp-stats { grid-template-columns: repeat(2, 1fr); } }
+  .yp-stat {
+    background: white; border: 1px solid var(--gray-200);
+    border-radius: 10px; padding: 16px;
+  }
+  .yp-stat .v {
+    font-size: 28px; font-weight: 800; color: var(--blue);
+    line-height: 1; letter-spacing: -0.02em;
+  }
+  .yp-stat .v .unit { font-size: 14px; color: var(--gray-500); margin-left: 2px; font-weight: 600; }
+  .yp-stat .l { font-size: 12px; color: var(--gray-500); margin-top: 6px; font-weight: 500; }
+  .yp-history {
+    background: white; border: 1px solid var(--gray-200);
+    border-radius: 10px; overflow: hidden;
+  }
+  .yp-history-head {
+    background: var(--gray-50); padding: 10px 16px;
+    font-size: 12px; font-weight: 600; color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-200);
+    letter-spacing: 0.04em;
+  }
+  .yp-row {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 12px;
+    align-items: center; padding: 10px 16px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 14px;
+  }
+  .yp-row:first-of-type { border-top: none; }
+  .yp-row .name { font-weight: 600; color: var(--ink); }
+  .yp-row .when { font-size: 11px; color: var(--gray-500); }
+  .yp-row .score {
+    font-weight: 700; font-size: 14px;
+    padding: 3px 10px; border-radius: 999px;
+    background: var(--blue-l); color: var(--blue);
+    min-width: 56px; text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .yp-row .score.high { background: #DCFCE7; color: #15803D; }
+  .yp-row .score.mid  { background: #FEF3C7; color: #B45309; }
+  .yp-row .score.low  { background: #FEE2E2; color: #B91C1C; }
+
+  /* ====== カテゴリーセクション ====== */
+  section { padding: 72px 0; }
+  .sec-head {
+    display: flex; align-items: end; justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .sec-head h2 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .sec-head .sec-meta {
+    font-size: 14px;
+    color: var(--gray-500);
+  }
+  .sec-head .sec-meta strong { color: var(--ink); font-weight: 600; }
+
+  /* コースカードグリッド */
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1024px) { .course-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .course-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+  @media (max-width: 480px) { .course-grid { grid-template-columns: 1fr; } }
+
+  .course-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+    cursor: pointer;
+  }
+  .course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--gray-300);
+  }
+  .course-card.visited { border-color: var(--blue); }
+  .course-card.visited .course-thumb { background: var(--blue-l); }
+
+  .course-thumb {
+    height: 140px;
+    background: var(--gray-50);
+    display: grid; place-items: center;
+    border-bottom: 1px solid var(--gray-200);
+    position: relative;
+    overflow: hidden;
+  }
+  .course-thumb svg.illust {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  /* Claude.com 風カテゴリ別配色（暖色系統一） */
+  .thumb-cream  { background: #F5EDDD; }
+  .thumb-peach  { background: #FAE5DA; }
+  .thumb-sage   { background: #E5EAE0; }
+  .thumb-sky    { background: #E5ECF2; }
+  .thumb-rose   { background: #F2E1DC; }
+  .thumb-sand   { background: #EDE6D6; }
+
+  .course-thumb .badge {
     position: absolute; top: 10px; right: 10px;
-    background: transparent; border: 0;
-    color: var(--sub); font-size: 18px; cursor: pointer;
-    padding: 4px; border-radius: 6px; line-height: 1;
-    z-index: 1; transition: color .15s, transform .15s;
+    background: white;
+    border: 1px solid var(--gray-200);
+    color: var(--gray-700);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    z-index: 2;
   }
-  .fav-btn:hover { color: #fbbf24; transform: scale(1.15); }
-  .fav-btn[aria-pressed="true"] { color: #f59e0b; }
+  .course-thumb .badge.entry { background: #ECFDF3; color: #027A48; border-color: #A6F4C5; }
+  .course-thumb .badge.intermediate { background: #FFF8E5; color: #B54708; border-color: #FEDF89; }
+  .course-thumb .badge.advanced { background: #FEF3F2; color: #B42318; border-color: #FDA29B; }
 
-  /* 最近開いたバッジ */
-  .recent-badge {
-    position: absolute; top: 10px; left: 10px;
-    background: var(--accent); color: #fff;
-    font-size: 9px; padding: 2px 6px; border-radius: 4px;
-    letter-spacing: .1em; font-weight: 700;
+  /* イラスト共通スタイル（手書き感） */
+  .illust { color: #1F1B16; }
+  .illust .terra { stroke: #DA7757; }
+  .illust .terra-fill { fill: #DA7757; }
+  .illust .ink { stroke: #1F1B16; }
+  .illust .ink-fill { fill: #1F1B16; }
+  .illust path, .illust line, .illust circle, .illust rect, .illust polyline, .illust polygon { stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+
+  .course-body {
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+    flex-grow: 1;
   }
-
-  /* カードごとのアクセントカラー */
-  .card-fp { --accent-card: #f59e0b; --accent-card2: #fbbf24; }
-  .card-bk { --accent-card: #14b8a6; --accent-card2: #2dd4bf; }
-  .card-it { --accent-card: #a855f7; --accent-card2: #c084fc; }
-  .card-g  { --accent-card: #22c55e; --accent-card2: #4ade80; }
-  .card-spi{ --accent-card: #ef4444; --accent-card2: #f87171; }
-  .card-uni{ --accent-card: #3b82f6; --accent-card2: #60a5fa; }
-  .card-shi{ --accent-card: #8b5cf6; --accent-card2: #a78bfa; }
-  .card-tak{ --accent-card: #10b981; --accent-card2: #34d399; }
-  .card-fe { --accent-card: #6366f1; --accent-card2: #818cf8; }
-  .card-toeic{ --accent-card: #06b6d4; --accent-card2: #22d3ee; }
-  .card-kiken{ --accent-card: #f97316; --accent-card2: #fb923c; }
-  .card-ap { --accent-card: #3b82f6; --accent-card2: #60a5fa; }
-  .card-stat{ --accent-card: #a855f7; --accent-card2: #c084fc; }
-  .card-gyo{ --accent-card: #eab308; --accent-card2: #facc15; }
-  .card-aws{ --accent-card: #f97316; --accent-card2: #fb923c; }
-  .card-sho{ --accent-card: #16a34a; --accent-card2: #22c55e; }
-  .card-keiei{ --accent-card: #0ea5e9; --accent-card2: #38bdf8; }
-  .card-koumu{ --accent-card: #dc2626; --accent-card2: #f87171; }
-
-  /* 空状態 */
-  .empty {
-    text-align: center; padding: 60px 20px;
-    color: var(--sub); font-size: 0.9rem;
+  .course-cat {
+    font-size: 11px;
+    color: var(--gray-500);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
-  .empty .em-icon { font-size: 3rem; margin-bottom: 12px; opacity: .6; }
-  .empty .em-title { color: var(--text); font-weight: 700; margin-bottom: 6px; font-size: 1rem; }
+  .course-body h3 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .course-body p {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.55;
+    flex-grow: 1;
+  }
+  .course-foot {
+    padding: 12px 16px;
+    border-top: 1px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .course-foot .qcount { font-weight: 600; color: var(--ink); }
+  .course-foot .arrow { color: var(--blue); font-weight: 600; }
+  .course-card.visited .arrow::before { content: "✓ "; color: var(--blue); }
 
-  /* 「ランダムでスタート」FAB */
-  .fab {
-    position: fixed;
-    bottom: calc(20px + env(safe-area-inset-bottom));
-    right: 20px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-    border: 0; border-radius: 999px;
-    padding: 14px 22px; font-size: 0.92rem; font-weight: 700;
-    box-shadow: 0 10px 30px -8px rgba(96,165,250,.5);
-    cursor: pointer; z-index: 40;
-    display: flex; align-items: center; gap: 8px;
+  /* ====== 使い方 ====== */
+  .how {
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .how-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  @media (max-width: 768px) { .how-grid { grid-template-columns: 1fr; } }
+  .how-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
     transition: transform .15s, box-shadow .15s;
   }
-  .fab:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 36px -10px rgba(96,165,250,.6); }
-  .fab:active { transform: translateY(0) scale(0.98); }
-
-  /* キーボードヘルプ */
-  .help-btn {
-    position: fixed;
-    bottom: calc(22px + env(safe-area-inset-bottom));
-    left: 20px;
-    background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 999px;
-    width: 36px; height: 36px;
-    cursor: pointer; z-index: 40;
-    font-family: monospace; font-weight: 700;
-    display: none;
+  .how-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .how-card .step-illust {
+    height: 72px;
+    margin-bottom: 18px;
+    background: var(--blue-l);
+    border-radius: 8px;
+    display: grid; place-items: center;
+    overflow: hidden;
   }
-  @media (min-width: 720px) { .help-btn { display: flex; align-items: center; justify-content: center; } }
-
-  .help-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.6);
-    z-index: 50; display: none; align-items: center; justify-content: center;
-    padding: 16px;
-    animation: fadeIn .15s ease-out;
+  .how-card .step-illust svg { width: 70%; height: 70%; }
+  .how-card .num {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    color: white;
+    border-radius: 8px;
+    display: inline-grid; place-items: center;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 14px;
   }
-  .help-overlay.open { display: flex; }
-  .help-card {
-    background: var(--bg-elev); color: var(--text);
-    border: 1px solid var(--border); border-radius: 14px;
-    padding: 22px; max-width: 380px; width: 100%;
-    animation: zoomIn .15s ease-out;
+  .how-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
   }
-  .help-card h3 { margin-bottom: 4px; font-size: 1.1rem; }
-  .help-card .help-sub { color: var(--sub); font-size: 0.8rem; margin-bottom: 14px; }
-  .help-row { display: flex; justify-content: space-between; padding: 6px 0; align-items: center; font-size: 0.88rem; }
-  .help-row kbd {
-    font-family: monospace; font-size: 0.78rem;
-    border: 1px solid var(--border); background: var(--card);
-    padding: 2px 8px; border-radius: 4px;
-  }
-  .help-close {
-    background: transparent; border: 0; color: var(--sub);
-    font-size: 20px; cursor: pointer; padding: 4px;
+  .how-card p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.7;
   }
 
-  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-  @keyframes zoomIn { from { transform: scale(.95); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+  /* ====== 受講者バンド (ダミー) ====== */
+  .voice-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  @media (max-width: 768px) { .voice-grid { grid-template-columns: 1fr; } }
+  .voice-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .voice-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .voice-card .achievement {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #ECFDF3;
+    color: #027A48;
+    border: 1px solid #A6F4C5;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .voice-card .achievement::before { content: "✓"; }
+  .voice-card h5 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .voice-card p {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .voice-card .stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    padding: 12px 0;
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 14px;
+  }
+  .voice-card .stats div { padding: 0 4px; }
+  .voice-card .stats .v { font-size: 18px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+  .voice-card .stats .l { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+  .voice-card .person {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .voice-card .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--gray-100);
+    color: var(--gray-700);
+    display: grid; place-items: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .voice-card .meta { font-size: 12px; }
+  .voice-card .meta .name { font-weight: 600; color: var(--ink); }
+  .voice-card .meta .role { color: var(--gray-500); }
 
-  /* ── Footer ── */
+  /* ====== CTA ====== */
+  .cta-band {
+    background: var(--ink);
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    padding: 80px 32px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before, .cta-band::after {
+    content: ""; position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .cta-band::before {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(0,102,255,0.4) 0%, transparent 70%);
+    top: -160px; left: -80px;
+  }
+  .cta-band::after {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(0,102,255,0.3) 0%, transparent 70%);
+    bottom: -140px; right: -60px;
+  }
+  .cta-band > * { position: relative; z-index: 1; }
+  .cta-band .micro-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    letter-spacing: 0.04em;
+  }
+  .cta-band .micro-tag::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--blue);
+    animation: ctaPulse 2s ease-in-out infinite;
+  }
+  @keyframes ctaPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .cta-band h2 {
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  .cta-band h2 .accent { color: var(--blue); }
+  .cta-band p { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 32px; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .cta-band .btn-primary { background: var(--blue); padding: 18px 36px; font-size: 16px; }
+  .cta-band .btn-primary:hover { background: var(--blue-d); }
+  .cta-band .micro-stats {
+    display: flex; justify-content: center; gap: 32px;
+    margin-top: 32px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    flex-wrap: wrap;
+  }
+  .cta-band .micro-stats span::before { content: "✓ "; color: var(--blue); font-weight: 700; }
+
+  /* ====== フッター ====== */
   footer {
-    text-align: center; margin-top: 56px; padding-top: 24px;
-    border-top: 1px solid var(--border); color: var(--sub); font-size: 0.78rem;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    padding: 64px 0 28px;
   }
-  footer a { color: var(--accent); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
-
-  /* レスポンシブ */
-  @media (max-width: 600px) {
-    .stats { gap: 18px; }
-    .stat-num { font-size: 1.3rem; }
-    .grid { grid-template-columns: 1fr; gap: 12px; }
-    .hero { padding: 24px 0 12px; }
-    .toolbar { margin-left: -12px; margin-right: -12px; padding: 10px 12px; }
-    .container { padding: 16px 12px 100px; }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after { transition: none !important; animation: none !important; }
+  @media (max-width: 768px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  .foot-brand .nav-logo { margin-bottom: 14px; }
+  .foot-brand p { font-size: 13px; color: var(--gray-500); line-height: 1.7; max-width: 320px; margin-bottom: 14px; }
+  .foot-brand .creator { font-size: 12px; color: var(--gray-400); }
+  .foot-col h5 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
   }
+  .foot-col ul { list-style: none; }
+  .foot-col li { margin-bottom: 9px; font-size: 13px; }
+  .foot-col li a { color: var(--gray-500); transition: color .15s; }
+  .foot-col li a:hover { color: var(--blue); }
+  .foot-bottom {
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .foot-bottom a { color: var(--gray-700); font-weight: 500; }
+  .foot-bottom a:hover { color: var(--blue); }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- Hero -->
-  <header class="hero">
-    <div class="badge">STUDY PORTAL</div>
-    <h1>スキマ時間で<br>資格と受験を一気に。</h1>
-    <p>
-      FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで、
-      20の一問一答を1か所に集約。スマホひとつで通学・通勤の合間にトレーニング。
-    </p>
-    <div class="stats">
-      <div class="stat"><div class="stat-num" id="stat-categories">20</div><div class="stat-label">CATEGORIES</div></div>
-      <div class="stat"><div class="stat-num" id="stat-questions">1315</div><div class="stat-label">QUESTIONS</div></div>
-      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">FREE</div></div>
-    </div>
-  </header>
-
-  <!-- ── ツールバー ── -->
-  <div class="toolbar">
-    <div class="toolbar-row">
-      <div class="search">
-        <input id="search" type="search" placeholder="資格・キーワードで検索（例：簿記、AI、就活）"
-               aria-label="検索" autocomplete="off" />
-        <span class="search-icon">🔍</span>
-        <span class="kbd-hint">/</span>
-        <button class="search-clear" id="search-clear" aria-label="検索をクリア">×</button>
-      </div>
-      <button class="icon-btn" id="fav-only" aria-pressed="false" aria-label="お気に入りのみ表示" title="お気に入りのみ">⭐</button>
-      <button class="icon-btn" id="theme-toggle" aria-label="テーマ切替" title="テーマ切替（T）">🌙</button>
-    </div>
-    <div class="chips" role="tablist" aria-label="カテゴリフィルタ">
-      <button class="chip" role="tab" aria-pressed="true"  data-cat="all">すべて<span class="chip-count" id="count-all"></span></button>
-      <button class="chip" role="tab" aria-pressed="false" data-cat="biz">💼 ビジネス<span class="chip-count" id="count-biz"></span></button>
-      <button class="chip" role="tab" aria-pressed="false" data-cat="it">💻 IT・AI<span class="chip-count" id="count-it"></span></button>
-      <button class="chip" role="tab" aria-pressed="false" data-cat="lang">🌐 語学<span class="chip-count" id="count-lang"></span></button>
-      <button class="chip" role="tab" aria-pressed="false" data-cat="koka">🏛️ 国家資格<span class="chip-count" id="count-koka"></span></button>
-      <button class="chip" role="tab" aria-pressed="false" data-cat="exam">🎓 就活・受験<span class="chip-count" id="count-exam"></span></button>
-    </div>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="mark">M</span>
+      <span>manabi-quiz</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#courses">コース一覧</a>
+      <a href="#how">使い方</a>
+      <a href="#voice">受講者の声</a>
+      <a href="https://fp-quiz.vercel.app" class="nav-cta">無料で始める</a>
+    </nav>
   </div>
+</header>
 
-  <!-- 「最近開いた」セクション（JSで条件付き表示） -->
-  <section id="recent-section" hidden>
-    <p class="section-title">⏱️ 最近開いた <span class="count" id="recent-count"></span></p>
-    <div class="grid" id="recent-grid"></div>
-  </section>
-
-  <!-- ── ビジネス・経営 ── -->
-  <section data-cat="biz">
-    <p class="section-title">💼 ビジネス・経営 <span class="count">9 つの資格</span></p>
-    <div class="grid">
-      <a href="https://fp-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fp"
-         data-id="fp" data-keywords="fp3 ファイナンシャルプランナー お金 保険 税金 不動産 相続 ライフプラン">
-        <div class="icon">📊</div>
-        <div class="title">FP3級</div>
-        <div class="desc">ライフプラン・保険・資産運用・税金・不動産・相続。お金まわり全般の基礎。</div>
-        <div class="meta"><span><strong>120問</strong></span><span>6カテゴリ</span><span>初学者向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://bookkeeping-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
-         data-id="boki3" data-keywords="簿記 経理 会計 仕訳 決算 財務諸表">
-        <div class="icon">📒</div>
-        <div class="title">簿記3級</div>
-        <div class="desc">仕訳・勘定科目・財務諸表・決算処理。経理の基礎を一問一答で。</div>
-        <div class="meta"><span><strong>100問</strong></span><span>5カテゴリ</span><span>初学者向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://boki2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
-         data-id="boki2" data-keywords="簿記 商業簿記 工業簿記 中級">
-        <div class="icon">📕</div>
-        <div class="title">簿記2級</div>
-        <div class="desc">商業簿記・工業簿記。3級からのステップアップに。</div>
-        <div class="meta"><span><strong>50問</strong></span><span>中級</span><span>就活アピール</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://boki1-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
-         data-id="boki1" data-keywords="簿記 連結会計 原価計算 税効果会計 上級">
-        <div class="icon">📚</div>
-        <div class="title">簿記1級</div>
-        <div class="desc">連結会計・原価計算・税効果会計。最高峰の簿記資格。</div>
-        <div class="meta"><span><strong>35問</strong></span><span>上級</span><span>会計プロ向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://shindanshi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-shi"
-         data-id="shindanshi" data-keywords="中小企業診断士 経営 経済学 財務 経営理論 経営学部">
-        <div class="icon">📈</div>
-        <div class="title">中小企業診断士</div>
-        <div class="desc">経済学・財務会計・経営理論・運営管理・経営法務。経営コンサルの登竜門。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>5科目</span><span>経営学部向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://takken-drill.vercel.app" target="_blank" rel="noopener" class="card card-tak"
-         data-id="takken" data-keywords="宅建 不動産 権利関係 宅建業法 法令制限">
-        <div class="icon">🏘️</div>
-        <div class="title">宅建士</div>
-        <div class="desc">権利関係・宅建業法・法令制限・税。不動産・金融業界で重宝される国家資格。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>不動産系志望</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://gyousei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-gyo"
-         data-id="gyousei" data-keywords="行政書士 民法 行政法 憲法 商法 独立">
-        <div class="icon">⚖️</div>
-        <div class="title">行政書士</div>
-        <div class="desc">民法・行政法・憲法・商法。独立開業も可能な人気の国家資格。</div>
-        <div class="meta"><span><strong>50問</strong></span><span>4分野</span><span>独立志向</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://shoken2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-sho"
-         data-id="shoken" data-keywords="証券外務員 金融商品 投資 株式 債券">
-        <div class="icon">📈</div>
-        <div class="title">証券外務員2種</div>
-        <div class="desc">金融商品・法令・経済。金融業界・投資の基礎を体系的に。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>投資・金融志望</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://keiei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-keiei"
-         data-id="keiei" data-keywords="経営学 マネジメント 戦略 組織 会計 経営学部">
-        <div class="icon">🏢</div>
-        <div class="title">経営学検定</div>
-        <div class="desc">マネジメント・戦略・組織・会計。経営学部の基礎を一問一答で総ざらい。</div>
-        <div class="meta"><span><strong>50問</strong></span><span>4区分</span><span>経営学部直球</span></div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── IT・AI ── -->
-  <section data-cat="it">
-    <p class="section-title">💻 IT・AI <span class="count">6 つの資格</span></p>
-    <div class="grid">
-      <a href="https://it-passport-quiz.vercel.app" target="_blank" rel="noopener" class="card card-it"
-         data-id="ipa" data-keywords="ITパスポート IT基礎 ストラテジ マネジメント テクノロジ 新社会人">
-        <div class="icon">🖥️</div>
-        <div class="title">ITパスポート</div>
-        <div class="desc">ストラテジ・マネジメント・テクノロジ。社会人なら知っておきたいIT基礎。</div>
-        <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>新社会人向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://kihonjouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fe"
-         data-id="fe" data-keywords="基本情報技術者 fe アルゴリズム エンジニア IT就職">
-        <div class="icon">⚙️</div>
-        <div class="title">基本情報技術者</div>
-        <div class="desc">ITパスポートの上位。エンジニア入門の登竜門、3区分から出題。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>IT就職向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://oyojouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-ap"
-         data-id="ap" data-keywords="応用情報技術者 ap IT中級">
-        <div class="icon">🧠</div>
-        <div class="title">応用情報技術者</div>
-        <div class="desc">基本情報の上位資格。テクノロジ・マネジメント・ストラテジを横断的に。</div>
-        <div class="meta"><span><strong>50問</strong></span><span>3区分</span><span>IT中級向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://aws-clf-quiz-pi.vercel.app" target="_blank" rel="noopener" class="card card-aws"
-         data-id="aws" data-keywords="AWS クラウド インフラ ec2 s3 cloud practitioner">
-        <div class="icon">☁️</div>
-        <div class="title">AWS Cloud Practitioner</div>
-        <div class="desc">AWS基礎・クラウド入門。IT系副業・インフラ就職で武器になる。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>クラウド入門</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://g-quiz-seven.vercel.app" target="_blank" rel="noopener" class="card card-g"
-         data-id="g" data-keywords="G検定 AI 機械学習 ディープラーニング 統計 倫理">
-        <div class="icon">🤖</div>
-        <div class="title">G検定</div>
-        <div class="desc">数学・統計、機械学習、ディープラーニング、AI倫理。AI時代の基礎教養。</div>
-        <div class="meta"><span><strong>100問</strong></span><span>5分野</span><span>AI入門者向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://toukei3-quiz.vercel.app" target="_blank" rel="noopener" class="card card-stat"
-         data-id="toukei3" data-keywords="統計検定 統計 確率 データ分析 推測統計">
-        <div class="icon">📊</div>
-        <div class="title">統計検定3級</div>
-        <div class="desc">記述統計・確率・推測統計。データ分析・経営学・AIの土台になる必修知識。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>3分野</span><span>データ分析入門</span></div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── 語学 ── -->
-  <section data-cat="lang">
-    <p class="section-title">🌐 語学 <span class="count">1 つの試験</span></p>
-    <div class="grid">
-      <a href="https://toeic-drill.vercel.app" target="_blank" rel="noopener" class="card card-toeic"
-         data-id="toeic" data-keywords="TOEIC 英語 リスニング リーディング 単語 文法 就活 昇進">
-        <div class="icon">🌐</div>
-        <div class="title">TOEIC</div>
-        <div class="desc">単語・文法・短文読解・リスニング基礎。就活と昇進で必須の英語スコア。</div>
-        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>就活・昇進</span></div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── 国家資格 ── -->
-  <section data-cat="koka">
-    <p class="section-title">🏛️ 国家資格（その他） <span class="count">1 つの資格</span></p>
-    <div class="grid">
-      <a href="https://kikenbutu-quiz.vercel.app" target="_blank" rel="noopener" class="card card-kiken"
-         data-id="kiken" data-keywords="危険物 乙4 ガソリンスタンド 法令 物理化学 国家資格">
-        <div class="icon">⛽</div>
-        <div class="title">危険物乙4</div>
-        <div class="desc">法令・物理化学・性質と消火。ガソリンスタンドで必須の国家資格。</div>
-        <div class="meta"><span><strong>30問</strong></span><span>3分野</span><span>就職に有利</span></div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ── 就活・受験 ── -->
-  <section data-cat="exam">
-    <p class="section-title">🎓 就活・受験 <span class="count">3 つ</span></p>
-    <div class="grid">
-      <a href="https://spi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-spi"
-         data-id="spi" data-keywords="SPI 適性検査 言語 非言語 性格 就活">
-        <div class="icon">📝</div>
-        <div class="title">SPI</div>
-        <div class="desc">言語・非言語・性格適性。新卒就活で最頻出の適性検査対策。</div>
-        <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>就活生向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://daigaku-quiz.vercel.app" target="_blank" rel="noopener" class="card card-uni"
-         data-id="daigaku" data-keywords="大学受験 共通テスト 英語 数学 国語 理科 社会 高校">
-        <div class="icon">🎓</div>
-        <div class="title">大学受験</div>
-        <div class="desc">英語・数学・国語・理科基礎・社会。共通テスト基礎レベルを5教科横断で。</div>
-        <div class="meta"><span><strong>200問</strong></span><span>5教科</span><span>高校生向け</span></div>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://koumuin-quiz.vercel.app" target="_blank" rel="noopener" class="card card-koumu"
-         data-id="koumuin" data-keywords="公務員 一般教養 数的処理 文章理解 自然 人文 就活">
-        <div class="icon">🏛️</div>
-        <div class="title">公務員試験 一般教養</div>
-        <div class="desc">数的処理・文章理解・社会・人文・自然。就活保険にも使える教養対策。</div>
-        <div class="meta"><span><strong>50問</strong></span><span>5区分</span><span>就活・公務員志望</span></div>
-        <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- 検索結果なし -->
-  <div class="empty" id="empty-state" hidden>
-    <div class="em-icon">🔎</div>
-    <p class="em-title">該当するクイズが見つかりません</p>
-    <p>検索ワードを変えるか、カテゴリを「すべて」に戻してみてください。</p>
-  </div>
-
-  <footer>
-    <p>© 2026 manabi-quiz — 学習ポータル</p>
-    <p style="margin-top:8px">合計 <strong id="footer-q">1,315</strong> 問・<strong id="footer-c">20</strong> 資格</p>
-  </footer>
-</div>
-
-<!-- ランダム挑戦 FAB -->
-<button class="fab" id="fab-random" aria-label="ランダムでクイズを開く">🎲 ランダムで挑戦</button>
-<button class="help-btn" id="help-btn" aria-label="キーボードショートカット">?</button>
-
-<!-- キーボードヘルプ -->
-<div class="help-overlay" id="help" role="dialog" aria-modal="true" aria-label="キーボードショートカット">
-  <div class="help-card">
-    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
       <div>
-        <h3>キーボードショートカット</h3>
-        <p class="help-sub">入力欄以外でキーを押すと動きます</p>
+        <div class="hero-badge">完全無料・登録不要・スキマ時間で学べる</div>
+        <h1>
+          <span class="underline accent">18コース・1,215問</span>。<br>
+          1日1問から、<br>はじめよう。
+        </h1>
+        <p>
+          FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで。<br>
+          高校生・大学生のための、続けられる資格学習サイト。
+        </p>
+        <div class="hero-ctas">
+          <a href="#courses" class="btn-primary">コース一覧を見る</a>
+          <a href="#how" class="btn-ghost">使い方を見る</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="v">18<span class="unit">コース</span></div><div class="l">資格・試験対策</div></div>
+          <div class="stat-item"><div class="v">1,215<span class="unit">問</span></div><div class="l">累計問題数</div></div>
+          <div class="stat-item"><div class="v">¥0</div><div class="l">完全無料</div></div>
+          <div class="stat-item"><div class="v">1<span class="unit">分</span></div><div class="l">1問あたり</div></div>
+        </div>
       </div>
-      <button class="help-close" id="help-close" aria-label="閉じる">×</button>
+
+      <aside class="hero-preview" aria-label="人気のコース TOP 3">
+        <h4>人気のコース</h4>
+        <a class="preview-row" href="https://fp-quiz.vercel.app">
+          <div class="rank">1</div>
+          <div class="body"><div class="ttl">FP 3級</div><div class="meta">120問 · 入門 · 金融</div></div>
+          <div class="arrow">→</div>
+        </a>
+        <a class="preview-row" href="https://daigaku-quiz.vercel.app">
+          <div class="rank">2</div>
+          <div class="body"><div class="ttl">大学受験 基礎</div><div class="meta">200問 · 入門 · 5教科</div></div>
+          <div class="arrow">→</div>
+        </a>
+        <a class="preview-row" href="https://g-quiz-seven.vercel.app">
+          <div class="rank">3</div>
+          <div class="body"><div class="ttl">G 検定</div><div class="meta">100問 · 中級 · AI</div></div>
+          <div class="arrow">→</div>
+        </a>
+        <a class="preview-foot" href="#courses">全 18 コースを見る →</a>
+      </aside>
     </div>
-    <div class="help-row"><span>検索にフォーカス</span><kbd>/</kbd></div>
-    <div class="help-row"><span>テーマ切替</span><kbd>T</kbd></div>
-    <div class="help-row"><span>お気に入りのみ表示</span><kbd>F</kbd></div>
-    <div class="help-row"><span>ランダムでクイズを開く</span><kbd>R</kbd></div>
-    <div class="help-row"><span>クリア／閉じる</span><kbd>Esc</kbd></div>
-    <div class="help-row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:10px"><span>このダイアログを開く</span><kbd>?</kbd></div>
+  </div>
+</section>
+
+<!-- 信頼バンド -->
+<div class="trust-band">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item"><div class="v">✓ 登録不要</div><div class="l">即始められる</div></div>
+      <div class="trust-item"><div class="v">✓ 広告なし</div><div class="l">集中して学べる</div></div>
+      <div class="trust-item"><div class="v">✓ スマホ対応</div><div class="l">通学中でもOK</div></div>
+      <div class="trust-item"><div class="v">✓ 進捗保存</div><div class="l">続きから再開</div></div>
+    </div>
   </div>
 </div>
+
+<!-- あなたの学習（履歴があれば自動表示） -->
+<section id="your-progress" class="your-progress" hidden>
+  <div class="container">
+    <div class="yp-head">
+      <h2>あなたの学習</h2>
+      <button class="yp-clear" id="yp-clear-btn" type="button">履歴をリセット</button>
+    </div>
+    <div class="yp-stats" id="yp-stats"></div>
+    <div class="yp-history">
+      <div class="yp-history-head">最近の学習履歴</div>
+      <div id="yp-rows"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 就活・受験 -->
+<section id="courses">
+  <div class="container">
+    <div class="sec-head">
+      <h2>就活・受験対策</h2>
+      <div class="sec-meta"><strong>3 コース</strong> · 340 問</div>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="https://daigaku-quiz.vercel.app">
+        <div class="course-thumb thumb-peach">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <path class="ink" d="M30 38 Q100 22 170 38 L170 92 Q100 76 30 92 Z"/>
+            <path class="ink" d="M100 30 V90"/>
+            <path class="ink" d="M50 50 H85 M50 60 H80 M50 70 H85"/>
+            <path class="ink" d="M115 50 H150 M115 60 H145 M115 70 H150"/>
+            <path class="terra" d="M155 30 L175 50 L165 60 L145 40 Z" stroke-width="2.4"/>
+            <circle class="terra-fill" cx="170" cy="35" r="2"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">大学受験</div>
+          <h3>大学受験 基礎</h3>
+          <p>英語・数学・国語・理科・社会の共通テスト基礎。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">200 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://spi-quiz.vercel.app">
+        <div class="course-thumb thumb-peach">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="55" y="20" width="90" height="85" rx="4"/>
+            <path class="ink" d="M70 40 H130 M70 55 H120 M70 70 H125 M70 85 H115"/>
+            <path class="terra" d="M62 38 L67 43 L77 33" stroke-width="2.6"/>
+            <path class="terra" d="M62 53 L67 58 L77 48" stroke-width="2.6"/>
+            <circle class="ink" cx="65" cy="70" r="3"/>
+            <circle class="ink" cx="65" cy="85" r="3"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">就活</div>
+          <h3>SPI 対策</h3>
+          <p>言語・非言語・性格適性。 就活の定番。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">100 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://it-passport-quiz.vercel.app">
+        <div class="course-thumb thumb-sky">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="40" y="22" width="120" height="70" rx="4"/>
+            <path class="ink" d="M85 92 V104 M115 92 V104 M75 104 H125"/>
+            <path class="terra" d="M55 40 L70 55 L55 70" stroke-width="2.6"/>
+            <path class="ink" d="M85 70 H140"/>
+            <circle class="terra-fill" cx="148" cy="32" r="3"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">IT 国家資格</div>
+          <h3>ITパスポート</h3>
+          <p>ストラテジ・マネジメント・テクノロジ全範囲。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">100 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ビジネス資格 -->
+<section style="background: var(--gray-50); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);">
+  <div class="container">
+    <div class="sec-head">
+      <h2>ビジネス資格</h2>
+      <div class="sec-meta"><strong>8 コース</strong> · 475 問</div>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="https://fp-quiz.vercel.app">
+        <div class="course-thumb thumb-cream">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <circle class="ink" cx="100" cy="60" r="38"/>
+            <path class="terra-fill" d="M100 60 L100 22 A38 38 0 0 1 138 60 Z" opacity="0.85"/>
+            <path class="ink" d="M100 60 L100 22 M100 60 L138 60 M100 60 L72 86"/>
+            <text x="155" y="40" font-family="Inter,sans-serif" font-size="14" font-weight="800" class="ink-fill">¥</text>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">金融</div>
+          <h3>FP 3級</h3>
+          <p>6カテゴリの基礎120問。 最初の金融資格として定番。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">120 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://bookkeeping-quiz.vercel.app">
+        <div class="course-thumb thumb-sand">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="35" y="28" width="80" height="65" rx="3"/>
+            <path class="ink" d="M35 42 H115 M75 28 V93"/>
+            <path class="ink" d="M45 56 H65 M45 68 H65 M45 80 H65 M85 56 H105 M85 68 H105 M85 80 H105"/>
+            <rect class="ink" x="125" y="48" width="44" height="48" rx="3"/>
+            <path class="ink" d="M132 60 H162 M132 72 H162 M132 84 H162"/>
+            <path class="terra" d="M147 56 V64 M143 60 H151" stroke-width="2.6"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">会計</div>
+          <h3>簿記 3級</h3>
+          <p>仕訳・勘定科目・財務諸表・決算処理。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">100 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://boki2-quiz.vercel.app">
+        <div class="course-thumb thumb-sand">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="40" y="20" width="120" height="80" rx="3"/>
+            <path class="ink" d="M40 38 H160 M100 20 V100"/>
+            <path class="ink" d="M52 52 H88 M52 64 H88 M52 76 H88 M52 88 H80"/>
+            <path class="ink" d="M112 52 H148 M112 64 H148 M112 76 H148 M112 88 H140"/>
+            <circle class="terra-fill" cx="172" cy="32" r="3"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">会計</div>
+          <h3>簿記 2級</h3>
+          <p>商業・工業簿記。 3級の次のステップ。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">50 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://boki1-quiz.vercel.app">
+        <div class="course-thumb thumb-sand">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="32" y="30" width="80" height="68" rx="3"/>
+            <path class="ink" d="M32 46 H112 M40 60 H68 M40 72 H68 M40 84 H62 M76 60 H104 M76 72 H104 M76 84 H100"/>
+            <path class="terra" d="M125 90 L145 65 L155 75 L175 35" stroke-width="2.8"/>
+            <path class="terra" d="M165 35 L175 35 L175 45" stroke-width="2.6"/>
+          </svg>
+          <span class="badge advanced">上級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">会計</div>
+          <h3>簿記 1級</h3>
+          <p>最上位レベル。 会計・原価計算の応用。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">35 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://shindanshi-quiz.vercel.app">
+        <div class="course-thumb thumb-sage">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="35" y="50" width="40" height="55"/>
+            <path class="ink" d="M44 62 H52 M58 62 H66 M44 75 H52 M58 75 H66 M44 88 H52 M58 88 H66"/>
+            <rect class="ink" x="80" y="35" width="45" height="70"/>
+            <path class="ink" d="M89 47 H99 M105 47 H115 M89 60 H99 M105 60 H115 M89 73 H99 M105 73 H115 M89 86 H99 M105 86 H115"/>
+            <rect class="ink" x="130" y="62" width="35" height="43"/>
+            <path class="ink" d="M137 73 H143 M149 73 H155 M137 84 H143 M149 84 H155"/>
+            <path class="terra" d="M40 30 Q80 20 120 28 Q145 35 165 25" stroke-width="2.6"/>
+            <circle class="terra-fill" cx="167" cy="25" r="2.5"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">経営</div>
+          <h3>中小企業診断士</h3>
+          <p>経営戦略・組織・財務・運営管理の頻出。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://takken-drill.vercel.app">
+        <div class="course-thumb thumb-rose">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <path class="ink" d="M60 95 V55 L100 28 L140 55 V95 Z"/>
+            <path class="ink" d="M50 60 L100 22 L150 60"/>
+            <rect class="terra" x="88" y="68" width="24" height="27" stroke-width="2.6"/>
+            <path class="ink" d="M75 60 H85 V70 H75 Z M115 60 H125 V70 H115 Z"/>
+            <path class="terra-fill" d="M125 38 L130 38 L130 50 L125 50 Z"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">不動産</div>
+          <h3>宅建士</h3>
+          <p>権利関係・宅建業法・法令上の制限。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://gyousei-quiz.vercel.app">
+        <div class="course-thumb thumb-sage">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <rect class="ink" x="50" y="22" width="100" height="80" rx="3"/>
+            <path class="ink" d="M65 40 H135 M65 52 H125 M65 64 H135 M65 76 H120"/>
+            <circle class="terra" cx="100" cy="92" r="10" stroke-width="2.6"/>
+            <path class="terra" d="M93 92 L98 96 L107 87" stroke-width="2.6"/>
+            <path class="ink" d="M30 30 V95 M170 30 V95"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">法律</div>
+          <h3>行政書士</h3>
+          <p>憲法・民法・行政法の基礎50問。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">50 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://shoken2-quiz.vercel.app">
+        <div class="course-thumb thumb-cream">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <path class="ink" d="M30 95 H170"/>
+            <path class="ink" d="M30 95 V25"/>
+            <path class="terra" d="M40 80 L60 65 L78 72 L96 50 L118 58 L140 32 L162 40" stroke-width="2.8"/>
+            <circle class="terra-fill" cx="40" cy="80" r="3"/>
+            <circle class="terra-fill" cx="60" cy="65" r="3"/>
+            <circle class="terra-fill" cx="78" cy="72" r="3"/>
+            <circle class="terra-fill" cx="96" cy="50" r="3"/>
+            <circle class="terra-fill" cx="118" cy="58" r="3"/>
+            <circle class="terra-fill" cx="140" cy="32" r="3"/>
+            <circle class="terra-fill" cx="162" cy="40" r="3"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">金融</div>
+          <h3>証券外務員 2種</h3>
+          <p>株式・債券・投資信託の基礎。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- IT・AI -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <h2>IT・AI</h2>
+      <div class="sec-meta"><strong>5 コース</strong> · 270 問</div>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="https://kihonjouhou-quiz.vercel.app">
+        <div class="course-thumb thumb-sky">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.6">
+            <path class="ink" d="M70 30 L40 60 L70 90"/>
+            <path class="ink" d="M130 30 L160 60 L130 90"/>
+            <path class="terra" d="M115 30 L85 95" stroke-width="2.8"/>
+            <circle class="terra-fill" cx="100" cy="60" r="3"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">IT 国家資格</div>
+          <h3>基本情報技術者</h3>
+          <p>アルゴリズム・ネットワーク・DB・セキュリティ。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://oyojouhou-quiz.vercel.app">
+        <div class="course-thumb thumb-sky">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <circle class="ink" cx="100" cy="30" r="10"/>
+            <circle class="ink" cx="50" cy="80" r="10"/>
+            <circle class="ink" cx="150" cy="80" r="10"/>
+            <circle class="terra-fill" cx="100" cy="60" r="6"/>
+            <path class="ink" d="M100 40 L100 54 M95 65 L60 75 M105 65 L140 75"/>
+            <path class="ink" d="M60 85 L140 85" stroke-dasharray="3 3"/>
+          </svg>
+          <span class="badge advanced">上級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">IT 国家資格</div>
+          <h3>応用情報技術者</h3>
+          <p>基本情報の上位。 マネジメント領域も。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">50 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://aws-clf-quiz-pi.vercel.app">
+        <div class="course-thumb thumb-sky">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.6">
+            <path class="ink" d="M55 75 Q40 75 40 60 Q40 45 55 45 Q60 30 80 30 Q105 25 115 45 Q140 45 140 65 Q140 80 125 80 L60 80 Q55 80 55 75 Z"/>
+            <path class="terra" d="M85 95 L92 105 M105 95 L112 105 M125 95 L132 105" stroke-width="2.6"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">クラウド</div>
+          <h3>AWS CLF</h3>
+          <p>Cloud Practitioner 入門レベル。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://g-quiz-seven.vercel.app">
+        <div class="course-thumb thumb-rose">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <circle class="ink" cx="40" cy="35" r="6"/>
+            <circle class="ink" cx="40" cy="60" r="6"/>
+            <circle class="ink" cx="40" cy="85" r="6"/>
+            <circle class="terra-fill" cx="100" cy="40" r="7"/>
+            <circle class="terra-fill" cx="100" cy="80" r="7"/>
+            <circle class="ink" cx="160" cy="60" r="6"/>
+            <path class="ink" d="M46 35 L93 40 M46 35 L93 80 M46 60 L93 40 M46 60 L93 80 M46 85 L93 40 M46 85 L93 80"/>
+            <path class="ink" d="M107 40 L154 60 M107 80 L154 60"/>
+          </svg>
+          <span class="badge intermediate">中級</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">AI・機械学習</div>
+          <h3>G 検定</h3>
+          <p>機械学習・ディープラーニング・AI 倫理。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">100 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://toukei3-quiz.vercel.app">
+        <div class="course-thumb thumb-sky">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <path class="ink" d="M30 100 H170"/>
+            <rect class="ink" x="48" y="75" width="18" height="25"/>
+            <rect class="terra-fill" x="74" y="55" width="18" height="45" opacity="0.85"/>
+            <rect class="ink" x="100" y="40" width="18" height="60"/>
+            <rect class="terra-fill" x="126" y="62" width="18" height="38" opacity="0.85"/>
+            <rect class="ink" x="152" y="48" width="18" height="52"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">統計</div>
+          <h3>統計検定 3級</h3>
+          <p>確率・分布・推定・検定の基礎。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 語学・国家資格 -->
+<section style="background: var(--gray-50); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);">
+  <div class="container">
+    <div class="sec-head">
+      <h2>語学・国家資格</h2>
+      <div class="sec-meta"><strong>2 コース</strong> · 70 問</div>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="https://toeic-drill.vercel.app">
+        <div class="course-thumb thumb-peach">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <text x="50" y="78" font-family="Source Serif 4, Georgia, serif" font-size="68" font-weight="900" class="ink-fill">A</text>
+            <text x="115" y="78" font-family="Source Serif 4, Georgia, serif" font-size="68" font-weight="900" class="terra-fill">a</text>
+            <path class="ink" d="M30 95 H170"/>
+            <path class="terra" d="M30 100 L40 100 M50 100 L70 100 M80 100 L100 100" stroke-width="2.6"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">英語</div>
+          <h3>TOEIC ドリル</h3>
+          <p>頻出単語・文法・リーディング基礎。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">40 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+      <a class="course-card" href="https://kikenbutu-quiz.vercel.app">
+        <div class="course-thumb thumb-sand">
+          <svg class="illust" viewBox="0 0 200 120" fill="none" stroke-width="2.4">
+            <path class="ink" d="M85 25 H115 V50 L140 95 H60 L85 50 Z"/>
+            <path class="terra-fill" d="M75 80 H125 L115 95 H85 Z" opacity="0.85"/>
+            <circle class="ink" cx="92" cy="72" r="3"/>
+            <circle class="terra-fill" cx="105" cy="80" r="2.5"/>
+            <path class="ink" d="M82 25 H118"/>
+            <path class="terra" d="M155 30 L165 50 L145 50 Z" stroke-width="2.6"/>
+            <path class="terra" d="M155 38 V44 M155 47 L155 47" stroke-width="2.6"/>
+          </svg>
+          <span class="badge entry">入門</span>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">国家資格</div>
+          <h3>危険物乙4</h3>
+          <p>物理化学・性質消火・法令の基礎。</p>
+        </div>
+        <div class="course-foot"><span class="qcount">30 問</span><span class="arrow">学ぶ →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 使い方 -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="sec-head">
+      <h2>使い方は3ステップ</h2>
+      <div class="sec-meta">登録なし、すぐ始められます</div>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="step-illust">
+          <svg viewBox="0 0 100 60" fill="none" stroke="#0066FF" stroke-width="2.4" stroke-linecap="round">
+            <rect x="14" y="10" width="32" height="40" rx="3"/>
+            <path d="M22 22 H38 M22 30 H36 M22 38 H38"/>
+            <rect x="54" y="10" width="32" height="40" rx="3" stroke="#0066FF" fill="#0066FF" fill-opacity="0.12"/>
+            <path d="M62 22 H78 M62 30 H76 M62 38 H78"/>
+            <path d="M68 6 L72 10 L68 14" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="num">1</div>
+        <h4>コースを選ぶ</h4>
+        <p>18コースから今やりたい資格を1つ選ぶだけ。 入門/中級/上級のバッジで難易度がひと目で分かります。</p>
+      </div>
+      <div class="how-card">
+        <div class="step-illust">
+          <svg viewBox="0 0 100 60" fill="none" stroke="#0066FF" stroke-width="2.4" stroke-linecap="round">
+            <rect x="20" y="10" width="60" height="40" rx="3"/>
+            <path d="M28 22 H72"/>
+            <circle cx="32" cy="32" r="3"/>
+            <path d="M40 32 H72"/>
+            <circle cx="32" cy="42" r="3" fill="#0066FF"/>
+            <path d="M40 42 H72" stroke="#0066FF"/>
+          </svg>
+        </div>
+        <div class="num">2</div>
+        <h4>1問1分で解く</h4>
+        <p>1問あたり約1分。 通学中・寝る前のスキマ時間でOK。 解説つきだから、間違えても理解して進めます。</p>
+      </div>
+      <div class="how-card">
+        <div class="step-illust">
+          <svg viewBox="0 0 100 60" fill="none" stroke="#0066FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="14" y="42" width="14" height="8" fill="#0066FF" fill-opacity="0.15"/>
+            <rect x="32" y="34" width="14" height="16" fill="#0066FF" fill-opacity="0.25"/>
+            <rect x="50" y="22" width="14" height="28" fill="#0066FF" fill-opacity="0.4"/>
+            <rect x="68" y="14" width="14" height="36" fill="#0066FF"/>
+            <path d="M14 50 H86"/>
+          </svg>
+        </div>
+        <div class="num">3</div>
+        <h4>進捗が残る</h4>
+        <p>ブラウザに進捗が自動保存。 続きから再開できます。 受講済みコースには自動で印が付きます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 受講者の声 (ダミー) -->
+<section id="voice">
+  <div class="container">
+    <div class="sec-head">
+      <h2>受講者の声</h2>
+      <div class="sec-meta">高校生・大学生から社会人まで</div>
+    </div>
+    <div class="voice-grid">
+      <div class="voice-card">
+        <span class="achievement">SPI 言語 8割突破</span>
+        <h5>通学中の30分で、就活前のSPI対策が完了。</h5>
+        <p>テキストを買うか迷ってる間に、まず100問やってみました。 1日5問・3週間で言語/非言語を一通り。 本番の言語で8割取れたのが自信になりました。</p>
+        <div class="stats">
+          <div><div class="v">3週間</div><div class="l">学習期間</div></div>
+          <div><div class="v">100問</div><div class="l">解いた数</div></div>
+        </div>
+        <div class="person">
+          <div class="avatar">YK</div>
+          <div class="meta"><div class="name">Y.K さん</div><div class="role">大学3年・経営学部</div></div>
+        </div>
+      </div>
+
+      <div class="voice-card">
+        <span class="achievement">FP 3級 + 簿記 3級 並行</span>
+        <h5>テキスト買う前の概要把握に、ちょうどよかった。</h5>
+        <p>金融とお金の基礎を体系的に押さえたくて、FP3級と簿記3級を並行で。 解説がコンパクトで、「自分はどこが苦手か」を1週間で把握できました。</p>
+        <div class="stats">
+          <div><div class="v">2 コース</div><div class="l">並行学習</div></div>
+          <div><div class="v">毎日10問</div><div class="l">学習ペース</div></div>
+        </div>
+        <div class="person">
+          <div class="avatar">SM</div>
+          <div class="meta"><div class="name">S.M さん</div><div class="role">大学2年・経済学部</div></div>
+        </div>
+      </div>
+
+      <div class="voice-card">
+        <span class="achievement">G 検定 受験予定</span>
+        <h5>AI倫理の出題、思った以上に深かった。</h5>
+        <p>受験するか迷っていたので、まず100問解いて感触を掴みました。 AI倫理の問題が想像より深くて、テキスト購入を決断。 来月の本番に向けて準備中です。</p>
+        <div class="stats">
+          <div><div class="v">100問</div><div class="l">解いた数</div></div>
+          <div><div class="v">中級</div><div class="l">難易度</div></div>
+        </div>
+        <div class="person">
+          <div class="avatar">RT</div>
+          <div class="meta"><div class="name">R.T さん</div><div class="role">社会人2年目・SaaS営業</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding: 32px 0;">
+  <div class="container">
+    <div class="cta-band">
+      <div class="micro-tag">FOR HIGH SCHOOL & UNIVERSITY STUDENTS</div>
+      <h2>まず<span class="accent">1問だけ</span>、<br>解いてみよう。</h2>
+      <p>登録なし、課金なし、広告なし。 続くか分からない人も、まず1問から。 人気のFP3級なら、所要時間は1分。</p>
+      <a href="https://fp-quiz.vercel.app" class="btn-primary">FP 3級 をはじめる</a>
+      <div class="micro-stats">
+        <span>登録なし</span>
+        <span>1分で開始</span>
+        <span>進捗自動保存</span>
+        <span>スマホ対応</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="nav-logo">
+          <span class="mark">M</span>
+          <span>manabi-quiz</span>
+        </div>
+        <p>FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで、18コース・1,215問の資格学習サイト。 完全無料・登録不要・スキマ時間で学べる。</p>
+        <div class="creator">運営: <a href="https://saas-lab-eight.vercel.app/" style="color: var(--gray-700);">Saas Lab</a> · 大学生 1人で運営しています。</div>
+      </div>
+      <div class="foot-col">
+        <h5>就活・受験</h5>
+        <ul>
+          <li><a href="https://daigaku-quiz.vercel.app">大学受験</a></li>
+          <li><a href="https://spi-quiz.vercel.app">SPI 対策</a></li>
+          <li><a href="https://it-passport-quiz.vercel.app">ITパスポート</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>ビジネス資格</h5>
+        <ul>
+          <li><a href="https://fp-quiz.vercel.app">FP 3級</a></li>
+          <li><a href="https://bookkeeping-quiz.vercel.app">簿記 3級</a></li>
+          <li><a href="https://takken-drill.vercel.app">宅建士</a></li>
+          <li><a href="https://gyousei-quiz.vercel.app">行政書士</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>サイト情報</h5>
+        <ul>
+          <li><a href="#how">使い方</a></li>
+          <li><a href="#voice">受講者の声</a></li>
+          <li><a href="https://saas-lab-eight.vercel.app/">運営: Saas Lab</a></li>
+          <li><a href="mailto:shimizu.kouki.business@gmail.com">お問い合わせ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 manabi-quiz · 全 18コース・1,215問</span>
+      <span>BUILT WITH CLAUDE CODE · v7.2</span>
+    </div>
+  </div>
+</footer>
 
 <script>
-(function(){
-  'use strict';
-  const LS_THEME  = 'study-portal-theme';
-  const LS_FAVS   = 'study-portal-favorites';
-  const LS_RECENT = 'study-portal-recent';
+  const VISIT_KEY = "manabi_visited_v3";
+  const visited = new Set(JSON.parse(localStorage.getItem(VISIT_KEY) || "[]"));
+  document.querySelectorAll(".course-card").forEach((card) => {
+    const url = card.getAttribute("href");
+    if (visited.has(url)) card.classList.add("visited");
+    card.addEventListener("click", () => {
+      visited.add(url);
+      localStorage.setItem(VISIT_KEY, JSON.stringify([...visited]));
+      card.classList.add("visited");
+    });
+  });
+</script>
 
-  // ── テーマ ───────────────────────────────────────────────
-  const themeBtn = document.getElementById('theme-toggle');
-  function applyTheme(t){
-    document.documentElement.setAttribute('data-theme', t);
-    themeBtn.textContent = t === 'dark' ? '🌙' : '☀️';
-    document.querySelector('meta[name="theme-color"]').setAttribute(
-      'content', t === 'dark' ? '#0b0f1e' : '#f8fafc'
-    );
+<!-- あなたの学習：URLパラメータからスコア記録 + 履歴表示 -->
+<script>
+(function () {
+  const HIST_KEY = "manabi_history_v1";
+  const MAX_HIST = 200;
+
+  function load() { try { return JSON.parse(localStorage.getItem(HIST_KEY) || "[]"); } catch { return []; } }
+  function save(h) { localStorage.setItem(HIST_KEY, JSON.stringify(h.slice(0, MAX_HIST))); }
+
+  // クイズアプリから戻ってきた時の URL パラメータを保存
+  // 例: manabi-quiz.vercel.app/?from=fp-quiz&name=FP3級&score=95&total=120
+  const params = new URLSearchParams(location.search);
+  const from = params.get("from");
+  const score = parseInt(params.get("score") || "", 10);
+  const total = parseInt(params.get("total") || "", 10);
+  const name = params.get("name") || from || "";
+  if (from && Number.isFinite(score) && Number.isFinite(total) && total > 0) {
+    const hist = load();
+    hist.unshift({ from, name, score, total, at: new Date().toISOString() });
+    save(hist);
+    history.replaceState({}, "", location.pathname);
   }
-  let theme = localStorage.getItem(LS_THEME);
-  if (!theme) theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-  applyTheme(theme);
-  themeBtn.addEventListener('click', () => {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(LS_THEME, theme);
-    applyTheme(theme);
-  });
 
-  // ── お気に入り ───────────────────────────────────────────
-  const favs = new Set(JSON.parse(localStorage.getItem(LS_FAVS) || '[]'));
-  function saveFavs(){ localStorage.setItem(LS_FAVS, JSON.stringify(Array.from(favs))); }
+  function pct(s, t) { return Math.round((s / t) * 100); }
+  function bandClass(p) { return p >= 80 ? "high" : p >= 60 ? "mid" : "low"; }
+  function fmtRel(iso) {
+    const d = new Date(iso); const now = new Date();
+    const diffMs = +now - +d;
+    const min = Math.floor(diffMs / 60000);
+    if (min < 1) return "たった今";
+    if (min < 60) return `${min}分前`;
+    const h = Math.floor(min / 60);
+    if (h < 24) return `${h}時間前`;
+    const days = Math.floor(h / 24);
+    if (days < 7) return `${days}日前`;
+    return `${d.getMonth() + 1}/${d.getDate()}`;
+  }
 
-  document.querySelectorAll('.card[data-id]').forEach((card) => {
-    const id = card.dataset.id;
-    const btn = document.createElement('button');
-    btn.className = 'fav-btn';
-    btn.type = 'button';
-    btn.setAttribute('aria-label', 'お気に入りに追加/解除');
-    btn.setAttribute('aria-pressed', favs.has(id) ? 'true' : 'false');
-    btn.textContent = favs.has(id) ? '★' : '☆';
-    btn.addEventListener('click', (e) => {
-      e.preventDefault(); e.stopPropagation();
-      if (favs.has(id)) { favs.delete(id); btn.setAttribute('aria-pressed','false'); btn.textContent='☆'; }
-      else              { favs.add(id);    btn.setAttribute('aria-pressed','true');  btn.textContent='★'; }
-      saveFavs();
-      if (favOnly) applyFilter();
-    });
-    card.appendChild(btn);
-  });
+  function streak(hist) {
+    if (!hist.length) return 0;
+    const dates = [...new Set(hist.map((h) => h.at.slice(0, 10)))].sort().reverse();
+    const today = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (dates[0] !== today && dates[0] !== yesterday) return 0;
+    let count = 1;
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i - 1]); const cur = new Date(dates[i]);
+      if ((+prev - +cur) === 86400000) count++;
+      else break;
+    }
+    return count;
+  }
 
-  // ── 最近開いた ────────────────────────────────────────────
-  let recent = JSON.parse(localStorage.getItem(LS_RECENT) || '[]'); // 最大6件のid配列
-  function saveRecent(){ localStorage.setItem(LS_RECENT, JSON.stringify(recent)); }
-
-  document.querySelectorAll('.card[data-id]').forEach((card) => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.id;
-      recent = [id, ...recent.filter((x) => x !== id)].slice(0, 6);
-      saveRecent();
-      // すぐは表示更新しない（戻ってきたときに見える）
-    });
-  });
-
-  function renderRecent(){
-    const sec = document.getElementById('recent-section');
-    const grid = document.getElementById('recent-grid');
-    grid.innerHTML = '';
-    const ids = recent.filter((id) => document.querySelector(`.card[data-id="${id}"]`));
-    if (ids.length === 0) { sec.hidden = true; return; }
+  function render() {
+    const hist = load();
+    const sec = document.getElementById("your-progress");
+    if (!hist.length) { sec.hidden = true; return; }
     sec.hidden = false;
-    document.getElementById('recent-count').textContent = `${ids.length} 件`;
-    ids.forEach((id) => {
-      const orig = document.querySelector(`.card[data-id="${id}"]`);
-      const clone = orig.cloneNode(true);
-      // 「最近」バッジを追加
-      const tag = document.createElement('span');
-      tag.className = 'recent-badge';
-      tag.textContent = 'RECENT';
-      clone.appendChild(tag);
-      // クローンのfavボタンも独立して動かすため再ハンドリング
-      const fav = clone.querySelector('.fav-btn');
-      if (fav) fav.replaceWith(fav.cloneNode(true));
-      const fav2 = clone.querySelector('.fav-btn');
-      fav2.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        if (favs.has(id)) { favs.delete(id); }
-        else              { favs.add(id);    }
-        saveFavs();
-        renderAllFavStates();
-        if (favOnly) applyFilter();
-      });
-      // クリックで recent 更新
-      clone.addEventListener('click', () => {
-        recent = [id, ...recent.filter((x) => x !== id)].slice(0, 6);
-        saveRecent();
-      });
-      grid.appendChild(clone);
-    });
-  }
-  function renderAllFavStates(){
-    document.querySelectorAll('.card[data-id]').forEach((card) => {
-      const id = card.dataset.id;
-      card.querySelectorAll('.fav-btn').forEach((b) => {
-        const on = favs.has(id);
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-        b.textContent = on ? '★' : '☆';
-      });
-    });
-  }
-  renderRecent();
 
-  // ── カテゴリ別カウント ─────────────────────────────────────
-  const catCount = { all: 0, biz: 0, it: 0, lang: 0, koka: 0, exam: 0 };
-  document.querySelectorAll('section[data-cat]').forEach((s) => {
-    const c = s.dataset.cat;
-    const n = s.querySelectorAll('.card[data-id]').length;
-    catCount[c] = n;
-    catCount.all += n;
-  });
-  Object.entries(catCount).forEach(([k, v]) => {
-    const el = document.getElementById(`count-${k}`);
-    if (el) el.textContent = v ? `（${v}）` : '';
-  });
+    const totalQ = hist.reduce((s, h) => s + h.total, 0);
+    const totalCorrect = hist.reduce((s, h) => s + h.score, 0);
+    const avgPct = totalQ ? Math.round((totalCorrect / totalQ) * 100) : 0;
+    const courses = new Set(hist.map((h) => h.from)).size;
+    const streakDays = streak(hist);
 
-  // ── 検索 + カテゴリ + お気に入り フィルタ ──────────────────
-  const searchInput = document.getElementById('search');
-  const searchClear = document.getElementById('search-clear');
-  const favOnlyBtn  = document.getElementById('fav-only');
-  const emptyEl     = document.getElementById('empty-state');
-  let q = '';
-  let activeCat = 'all';
-  let favOnly = false;
+    document.getElementById("yp-stats").innerHTML = `
+      <div class="yp-stat"><div class="v">${streakDays}<span class="unit">日</span></div><div class="l">連続学習</div></div>
+      <div class="yp-stat"><div class="v">${hist.length}<span class="unit">回</span></div><div class="l">挑戦回数</div></div>
+      <div class="yp-stat"><div class="v">${avgPct}<span class="unit">%</span></div><div class="l">平均正答率</div></div>
+      <div class="yp-stat"><div class="v">${courses}<span class="unit">/18</span></div><div class="l">手をつけたコース</div></div>
+    `;
 
-  function applyFilter(){
-    const qq = q.trim().toLowerCase();
-    let visible = 0;
-    let visibleByCat = { biz: 0, it: 0, lang: 0, koka: 0, exam: 0 };
-
-    document.querySelectorAll('section[data-cat]').forEach((sec) => {
-      const cat = sec.dataset.cat;
-      const cards = sec.querySelectorAll('.card[data-id]');
-      let shownInSec = 0;
-      cards.forEach((card) => {
-        const id = card.dataset.id;
-        const txt = (card.textContent + ' ' + (card.dataset.keywords || '')).toLowerCase();
-        const matchQ   = !qq || txt.includes(qq);
-        const matchCat = activeCat === 'all' || activeCat === cat;
-        const matchFav = !favOnly || favs.has(id);
-        const show = matchQ && matchCat && matchFav;
-        card.style.display = show ? '' : 'none';
-        if (show) { shownInSec++; visible++; visibleByCat[cat]++; }
-      });
-      sec.style.display = shownInSec === 0 ? 'none' : '';
-    });
-
-    emptyEl.hidden = visible !== 0;
-    searchClear.classList.toggle('visible', !!qq);
+    document.getElementById("yp-rows").innerHTML = hist.slice(0, 8).map((h) => {
+      const p = pct(h.score, h.total);
+      return `
+        <div class="yp-row">
+          <div>
+            <div class="name">${h.name}</div>
+            <div class="when">${fmtRel(h.at)} · ${h.score}/${h.total}問正解</div>
+          </div>
+          <div class="score ${bandClass(p)}">${p}%</div>
+        </div>`;
+    }).join("");
   }
 
-  searchInput.addEventListener('input', (e) => { q = e.target.value; applyFilter(); });
-  searchClear.addEventListener('click', () => { searchInput.value = ''; q = ''; applyFilter(); searchInput.focus(); });
-
-  document.querySelectorAll('.chip[data-cat]').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      activeCat = chip.dataset.cat;
-      document.querySelectorAll('.chip[data-cat]').forEach((c) => c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'));
-      applyFilter();
-    });
+  document.getElementById("yp-clear-btn").addEventListener("click", () => {
+    if (!confirm("学習履歴をすべて消去しますか？")) return;
+    localStorage.removeItem(HIST_KEY);
+    render();
   });
 
-  favOnlyBtn.addEventListener('click', () => {
-    favOnly = !favOnly;
-    favOnlyBtn.setAttribute('aria-pressed', favOnly ? 'true' : 'false');
-    applyFilter();
-  });
-
-  // ── ランダム挑戦 ─────────────────────────────────────────
-  const fab = document.getElementById('fab-random');
-  fab.addEventListener('click', () => {
-    const cards = document.querySelectorAll('.card[data-id]');
-    const visible = Array.from(cards).filter((c) => c.style.display !== 'none');
-    const pool = visible.length > 0 ? visible : Array.from(cards);
-    const pick = pool[Math.floor(Math.random() * pool.length)];
-    if (pick) {
-      pick.click();
-      window.open(pick.href, '_blank', 'noopener');
-    }
-  });
-
-  // ── キーボードショートカット ───────────────────────────────
-  const helpBtn   = document.getElementById('help-btn');
-  const helpEl    = document.getElementById('help');
-  const helpClose = document.getElementById('help-close');
-  function openHelp(){ helpEl.classList.add('open'); }
-  function closeHelp(){ helpEl.classList.remove('open'); }
-  helpBtn.addEventListener('click', openHelp);
-  helpClose.addEventListener('click', closeHelp);
-  helpEl.addEventListener('click', (e) => { if (e.target === helpEl) closeHelp(); });
-
-  function isTyping(el){
-    if (!el) return false;
-    const tag = el.tagName;
-    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    // Escape はどこにいても効く
-    if (e.key === 'Escape') {
-      if (helpEl.classList.contains('open')) { e.preventDefault(); closeHelp(); return; }
-      if (document.activeElement === searchInput && searchInput.value) {
-        searchInput.value = ''; q = ''; applyFilter();
-      } else {
-        searchInput.blur();
-      }
-      return;
-    }
-    if (isTyping(e.target)) return;
-    if (e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); openHelp(); return; }
-    if (e.key === '/') { e.preventDefault(); searchInput.focus(); searchInput.select(); return; }
-    const k = e.key.toLowerCase();
-    if (k === 't') { e.preventDefault(); themeBtn.click(); return; }
-    if (k === 'f') { e.preventDefault(); favOnlyBtn.click(); return; }
-    if (k === 'r') { e.preventDefault(); fab.click(); return; }
-  });
-
-  // ── 初期化 ─────────────────────────────────────────────
-  applyFilter();
+  render();
 })();
 </script>
 </body>
