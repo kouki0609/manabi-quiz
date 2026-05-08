@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>manabi-quiz — 資格学習を、ゲームみたいに。</title>
+<meta name="description" content="FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで18の一問一答クイズを1か所に。 全1,215問・無料・登録不要。">
+<meta name="theme-color" content="#58cc02">
+<meta property="og:title" content="manabi-quiz — 資格学習を、ゲームみたいに。">
+<meta property="og:description" content="18の資格クイズ・全1,215問。 無料・登録不要・スキマ時間で。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2358cc02'/%3E%3Ctext x='50' y='72' font-size='62' text-anchor='middle' font-family='Arial Black' fill='white'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --green: #58cc02;
+    --green-dark: #46a302;
+    --green-shadow: #58a700;
+    --green-soft: #e5f8d4;
+    --blue: #1cb0f6;
+    --blue-dark: #0a91d4;
+    --blue-soft: #ddf4ff;
+    --purple: #ce82ff;
+    --purple-dark: #a560d8;
+    --purple-soft: #f3e3ff;
+    --orange: #ff9600;
+    --orange-dark: #cc7a00;
+    --orange-soft: #fff1d6;
+    --red: #ff4b4b;
+    --red-soft: #ffdcdc;
+    --pink: #ff86c8;
+    --yellow: #ffc800;
+    --ink: #3c3c3c;
+    --ink-2: #777;
+    --ink-3: #afafaf;
+    --line: #e5e5e5;
+    --bg: #fff;
+    --bg-2: #f7f7f7;
+  }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+  body {
+    font-family: "Nunito", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+
+  /* ヘッダー */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: white;
+    border-bottom: 2px solid var(--line);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 900; color: var(--green); }
+  .nav-logo .mark {
+    width: 36px; height: 36px;
+    background: var(--green);
+    border-radius: 12px;
+    color: white; display: grid; place-items: center;
+    font-size: 22px; font-weight: 900;
+    box-shadow: 0 3px 0 var(--green-shadow);
+  }
+  .nav-stats { display: flex; gap: 20px; font-size: 14px; }
+  .nav-stat { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+  .nav-stat .icon { font-size: 18px; }
+  .nav-stat strong { color: var(--ink); font-size: 16px; }
+  @media (max-width: 768px) { .nav-stats { display: none; } }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ヒーロー */
+  .hero {
+    padding: 60px 0 40px;
+    background: linear-gradient(180deg, var(--green-soft) 0%, white 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; text-align: center; } }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .accent { color: var(--green); }
+  .hero p {
+    font-size: 18px;
+    color: var(--ink-2);
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  @media (max-width: 768px) { .hero-ctas { justify-content: center; } }
+  .btn {
+    padding: 16px 28px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: transform .1s;
+    display: inline-block;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn-primary {
+    background: var(--green);
+    color: white;
+    box-shadow: 0 4px 0 var(--green-shadow);
+  }
+  .btn-primary:hover { background: var(--green-dark); }
+  .btn-ghost {
+    background: white;
+    color: var(--blue);
+    border: 2px solid var(--line);
+    box-shadow: 0 4px 0 var(--line);
+  }
+  .btn-ghost:hover { color: var(--blue-dark); }
+
+  /* マスコット */
+  .mascot-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    aspect-ratio: 1;
+  }
+  .mascot {
+    width: 240px; height: 240px;
+    margin: 0 auto;
+    background: var(--green);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    box-shadow: 0 8px 0 var(--green-shadow);
+    animation: bounce 3s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .mascot::before, .mascot::after {
+    content: "";
+    position: absolute;
+    width: 50px; height: 50px;
+    background: white;
+    border-radius: 50%;
+    top: 70px;
+  }
+  .mascot::before { left: 50px; }
+  .mascot::after { right: 50px; }
+  .mascot .eyes {
+    position: absolute;
+    width: 100%;
+    top: 88px;
+    display: flex; justify-content: space-around;
+    padding: 0 60px;
+  }
+  .mascot .eye {
+    width: 14px; height: 14px;
+    background: var(--ink);
+    border-radius: 50%;
+  }
+  .mascot .beak {
+    position: absolute;
+    width: 30px; height: 22px;
+    background: var(--orange);
+    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    top: 130px;
+    left: calc(50% - 15px);
+  }
+  .speech {
+    position: absolute;
+    background: white;
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 4px 0 var(--ink);
+    top: 0; right: 0;
+    transform: rotate(8deg);
+    z-index: 2;
+  }
+  .speech::after {
+    content: "";
+    position: absolute;
+    bottom: -10px; left: 30px;
+    width: 0; height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 12px solid var(--ink);
+  }
+  /* 浮遊バッジ */
+  .float-badge {
+    position: absolute;
+    background: white;
+    border: 3px solid;
+    border-radius: 50%;
+    width: 70px; height: 70px;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 900;
+    text-align: center;
+    line-height: 1.1;
+    animation: bounce 4s ease-in-out infinite;
+  }
+  .badge-streak { top: 30px; left: -10px; border-color: var(--orange); color: var(--orange); animation-delay: 0.5s; }
+  .badge-xp { bottom: 50px; right: -10px; border-color: var(--blue); color: var(--blue); animation-delay: 1s; }
+
+  /* ハイライトバンド（Duo風） */
+  .highlight-band {
+    background: white;
+    border-top: 2px solid var(--line);
+    border-bottom: 2px solid var(--line);
+    padding: 24px 0;
+  }
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+  @media (max-width: 768px) { .highlight-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+  .hl-item .icon { font-size: 32px; margin-bottom: 4px; }
+  .hl-item .v { font-size: 22px; font-weight: 900; color: var(--ink); }
+  .hl-item .l { font-size: 12px; color: var(--ink-2); }
+
+  /* セクション */
+  section { padding: 60px 0; }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+  .sec-title { font-size: 28px; font-weight: 900; color: var(--ink); display: flex; align-items: center; gap: 12px; }
+  .sec-title .ico {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 22px;
+    color: white;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+  }
+  .sec-title.business .ico { background: var(--blue); box-shadow: 0 3px 0 var(--blue-dark); }
+  .sec-title.it .ico { background: var(--purple); box-shadow: 0 3px 0 var(--purple-dark); }
+  .sec-title.lang .ico { background: var(--orange); box-shadow: 0 3px 0 var(--orange-dark); }
+  .sec-title.kokka .ico { background: var(--red); box-shadow: 0 3px 0 #c93b3b; }
+  .sec-title.shukatsu .ico { background: var(--green); box-shadow: 0 3px 0 var(--green-shadow); }
+  .sec-count {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink-2);
+    padding: 6px 12px;
+    background: var(--bg-2);
+    border-radius: 20px;
+  }
+
+  /* カードグリッド */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: white;
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+    cursor: pointer;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 0 var(--line); }
+
+  .card-emblem {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: grid; place-items: center;
+    font-size: 28px; font-weight: 900;
+    color: white;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+    align-self: flex-start;
+  }
+  .card h3 { font-size: 17px; font-weight: 900; color: var(--ink); line-height: 1.3; }
+  .card .desc { font-size: 12px; color: var(--ink-2); line-height: 1.5; flex-grow: 1; }
+  .card-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px;
+    color: var(--ink-2);
+    font-weight: 700;
+  }
+  .card-foot .qcount { color: var(--ink); }
+  .card-foot .arrow { font-weight: 900; color: var(--green); }
+  .card:hover .arrow { transform: translateX(4px); }
+  .arrow { transition: transform .15s; }
+
+  /* カテゴリ別カラー */
+  .c-blue .card-emblem { background: var(--blue); box-shadow: 0 3px 0 var(--blue-dark); }
+  .c-blue:hover { border-color: var(--blue); }
+  .c-purple .card-emblem { background: var(--purple); box-shadow: 0 3px 0 var(--purple-dark); }
+  .c-purple:hover { border-color: var(--purple); }
+  .c-orange .card-emblem { background: var(--orange); box-shadow: 0 3px 0 var(--orange-dark); }
+  .c-orange:hover { border-color: var(--orange); }
+  .c-red .card-emblem { background: var(--red); box-shadow: 0 3px 0 #c93b3b; }
+  .c-red:hover { border-color: var(--red); }
+  .c-green .card-emblem { background: var(--green); box-shadow: 0 3px 0 var(--green-shadow); }
+  .c-green:hover { border-color: var(--green); }
+  .c-yellow .card-emblem { background: var(--yellow); box-shadow: 0 3px 0 #d4a700; color: var(--ink); }
+  .c-yellow:hover { border-color: var(--yellow); }
+  .c-pink .card-emblem { background: var(--pink); box-shadow: 0 3px 0 #d96fa9; }
+  .c-pink:hover { border-color: var(--pink); }
+
+  /* バッジ */
+  .badge {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--orange);
+    color: white;
+    font-size: 10px; font-weight: 900;
+    padding: 4px 8px;
+    border-radius: 10px;
+    transform: rotate(8deg);
+    box-shadow: 0 2px 0 var(--orange-dark);
+  }
+  .badge.hot { background: var(--red); box-shadow: 0 2px 0 #c93b3b; }
+
+  /* CTA バンド */
+  .cta-band {
+    background: var(--green);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 900;
+    margin-bottom: 16px;
+  }
+  .cta-band p { font-size: 18px; margin-bottom: 28px; opacity: 0.95; }
+  .cta-band .btn-white {
+    background: white;
+    color: var(--green);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+  }
+  .cta-band .btn-white:hover { color: var(--green-dark); }
+
+  /* フッター */
+  footer {
+    background: var(--bg-2);
+    padding: 40px 0 24px;
+    text-align: center;
+    border-top: 2px solid var(--line);
+  }
+  footer p { font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
+  footer a { color: var(--blue); font-weight: 700; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ふきだし装飾 */
+  .pop {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a href="#" class="nav-logo">
+    <span class="mark">M</span>
+    <span>manabi-quiz</span>
+  </a>
+  <div class="nav-stats">
+    <div class="nav-stat"><span class="icon">📚</span><strong>18</strong> apps</div>
+    <div class="nav-stat"><span class="icon">❓</span><strong>1,215</strong> 問</div>
+    <div class="nav-stat"><span class="icon">🎯</span>無料</div>
+  </div>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div style="margin-bottom: 16px;">
+          <span class="pop">🎉 18 アプリ稼働中</span>
+          <span class="pop" style="background: var(--blue-soft); color: var(--blue-dark);">登録不要</span>
+        </div>
+        <h1>資格学習を、<br><span class="accent">ゲームみたい</span>に。</h1>
+        <p>
+          FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで。<br>
+          18の一問一答クイズが <strong style="color:var(--ink)">全部無料</strong>。 スキマ時間に1問だけでも。
+        </p>
+        <div class="hero-ctas">
+          <a href="#categories" class="btn btn-primary">学習を始める</a>
+          <a href="#about" class="btn btn-ghost">使い方を見る</a>
+        </div>
+      </div>
+
+      <div class="mascot-wrap">
+        <div class="speech">クイズを<br>はじめよう！</div>
+        <div class="float-badge badge-streak">🔥<br>STREAK</div>
+        <div class="float-badge badge-xp">⭐<br>+ 50 XP</div>
+        <div class="mascot">
+          <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+          <div class="beak"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ハイライト -->
+<div class="highlight-band">
+  <div class="container">
+    <div class="highlight-grid">
+      <div class="hl-item"><div class="icon">📱</div><div class="v">18</div><div class="l">クイズアプリ</div></div>
+      <div class="hl-item"><div class="icon">❓</div><div class="v">1,215+</div><div class="l">累計問題数</div></div>
+      <div class="hl-item"><div class="icon">💰</div><div class="v">¥0</div><div class="l">完全無料</div></div>
+      <div class="hl-item"><div class="icon">⏱️</div><div class="v">1分〜</div><div class="l">スキマ時間OK</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- カテゴリ：就活・受験 -->
+<section id="categories">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title shukatsu"><span class="ico">🎓</span>就活・受験</h2>
+      <span class="sec-count">3 apps · 340 問</span>
+    </div>
+    <div class="grid">
+      <a href="https://daigaku-quiz.vercel.app" class="card c-blue">
+        <div class="card-emblem">大</div>
+        <h3>大学受験</h3>
+        <div class="desc">英語・数学・国語・理科・社会の共通テスト基礎200問。</div>
+        <div class="card-foot"><span class="qcount">200 問</span><span class="arrow">→</span></div>
+        <div class="badge hot">人気</div>
+      </a>
+      <a href="https://spi-quiz.vercel.app" class="card c-green">
+        <div class="card-emblem">SPI</div>
+        <h3>SPI 対策</h3>
+        <div class="desc">言語・非言語・性格適性。 就活前に押さえる定番。</div>
+        <div class="card-foot"><span class="qcount">100 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://it-passport-quiz.vercel.app" class="card c-purple">
+        <div class="card-emblem">IT</div>
+        <h3>ITパスポート</h3>
+        <div class="desc">ストラテジ・マネジメント・テクノロジ全範囲。</div>
+        <div class="card-foot"><span class="qcount">100 問</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- カテゴリ：ビジネス資格 -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title business"><span class="ico">💼</span>ビジネス資格</h2>
+      <span class="sec-count">8 apps · 475 問</span>
+    </div>
+    <div class="grid">
+      <a href="https://fp-quiz.vercel.app" class="card c-blue">
+        <div class="card-emblem">FP</div>
+        <h3>FP 3級</h3>
+        <div class="desc">6カテゴリの基礎120問。 暗紫テーマ。</div>
+        <div class="card-foot"><span class="qcount">120 問</span><span class="arrow">→</span></div>
+        <div class="badge">最多</div>
+      </a>
+      <a href="https://bookkeeping-quiz.vercel.app" class="card c-orange">
+        <div class="card-emblem">簿3</div>
+        <h3>簿記 3級</h3>
+        <div class="desc">仕訳・勘定科目・財務諸表・決算処理。</div>
+        <div class="card-foot"><span class="qcount">100 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://boki2-quiz.vercel.app" class="card c-orange">
+        <div class="card-emblem">簿2</div>
+        <h3>簿記 2級</h3>
+        <div class="desc">商業・工業簿記。 3級の次のステップ。</div>
+        <div class="card-foot"><span class="qcount">50 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://boki1-quiz.vercel.app" class="card c-orange">
+        <div class="card-emblem">簿1</div>
+        <h3>簿記 1級</h3>
+        <div class="desc">最上位レベル。 会計・原価計算の応用。</div>
+        <div class="card-foot"><span class="qcount">35 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://shindanshi-quiz.vercel.app" class="card c-red">
+        <div class="card-emblem">診</div>
+        <h3>中小企業診断士</h3>
+        <div class="desc">経営戦略・組織・財務・運営管理の頻出。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://takken-drill.vercel.app" class="card c-yellow">
+        <div class="card-emblem">宅</div>
+        <h3>宅建士</h3>
+        <div class="desc">権利関係・宅建業法・法令上の制限。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://gyousei-quiz.vercel.app" class="card c-red">
+        <div class="card-emblem">行</div>
+        <h3>行政書士</h3>
+        <div class="desc">憲法・民法・行政法の基礎50問。</div>
+        <div class="card-foot"><span class="qcount">50 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://shoken2-quiz.vercel.app" class="card c-blue">
+        <div class="card-emblem">証</div>
+        <h3>証券外務員 2種</h3>
+        <div class="desc">株式・債券・投資信託の基礎。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- カテゴリ：IT・AI -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title it"><span class="ico">💻</span>IT・AI</h2>
+      <span class="sec-count">5 apps · 270 問</span>
+    </div>
+    <div class="grid">
+      <a href="https://kihonjouhou-quiz.vercel.app" class="card c-purple">
+        <div class="card-emblem">基</div>
+        <h3>基本情報技術者</h3>
+        <div class="desc">アルゴリズム・ネットワーク・DB・セキュリティ。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://oyojouhou-quiz.vercel.app" class="card c-purple">
+        <div class="card-emblem">応</div>
+        <h3>応用情報技術者</h3>
+        <div class="desc">基本情報の上位。 マネジメント領域も。</div>
+        <div class="card-foot"><span class="qcount">50 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://aws-clf-quiz-pi.vercel.app" class="card c-orange">
+        <div class="card-emblem">AWS</div>
+        <h3>AWS CLF</h3>
+        <div class="desc">Cloud Practitioner 入門レベル。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://g-quiz-seven.vercel.app" class="card c-purple">
+        <div class="card-emblem">G</div>
+        <h3>G 検定</h3>
+        <div class="desc">機械学習・ディープラーニング・AI 倫理。</div>
+        <div class="card-foot"><span class="qcount">100 問</span><span class="arrow">→</span></div>
+        <div class="badge hot">注目</div>
+      </a>
+      <a href="https://toukei3-quiz.vercel.app" class="card c-blue">
+        <div class="card-emblem">統</div>
+        <h3>統計検定 3級</h3>
+        <div class="desc">確率・分布・推定・検定の基礎。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- カテゴリ：語学・国家資格 -->
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title lang"><span class="ico">🌐</span>語学・国家資格</h2>
+      <span class="sec-count">2 apps · 70 問</span>
+    </div>
+    <div class="grid">
+      <a href="https://toeic-drill.vercel.app" class="card c-orange">
+        <div class="card-emblem">英</div>
+        <h3>TOEIC ドリル</h3>
+        <div class="desc">頻出単語・文法・リーディング基礎。</div>
+        <div class="card-foot"><span class="qcount">40 問</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://kikenbutu-quiz.vercel.app" class="card c-red">
+        <div class="card-emblem">乙4</div>
+        <h3>危険物乙4</h3>
+        <div class="desc">物理化学・性質消火・法令の基礎。</div>
+        <div class="card-foot"><span class="qcount">30 問</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="container">
+    <h2>1問だけ、解いてみよう。</h2>
+    <p>登録なし、課金なし、広告なし。 続くか分からない人も、まず1問から。</p>
+    <a href="https://fp-quiz.vercel.app" class="btn btn-white">人気の FP 3級ではじめる →</a>
+  </div>
+</div>
+
+<!-- フッター -->
+<footer>
+  <div class="container">
+    <p>© 2026 manabi-quiz · 学習ハブ</p>
+    <p>運営: <a href="https://saas-lab-eight.vercel.app/">Saas Lab</a> · お問い合わせ: <a href="mailto:shimizu.kouki.business@gmail.com">shimizu.kouki.business@gmail.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

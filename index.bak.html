@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Study Portal — 資格＆受験まとめ</title>
+<meta name="description" content="20の一問一答アプリを1か所に集約。FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで、合計1,315問。スキマ時間にサクッと学習。">
+<meta name="theme-color" content="#0b0f1e">
+<style>
+  :root {
+    --bg: #0b0f1e;
+    --bg-elev: #11162a;
+    --card: #1a1f33;
+    --card-hover: #232847;
+    --text: #e5e7eb;
+    --sub: #94a3b8;
+    --border: #2d3654;
+    --accent: #60a5fa;
+    --accent2: #818cf8;
+    --shadow: 0 6px 24px -10px rgba(0,0,0,0.6);
+    --radius: 16px;
+  }
+  /* ライトテーマ */
+  html[data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-elev: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f1f5f9;
+    --text: #0f172a;
+    --sub: #64748b;
+    --border: #e2e8f0;
+    --accent: #2563eb;
+    --accent2: #6366f1;
+    --shadow: 0 4px 16px -8px rgba(15,23,42,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
+    min-height: 100vh;
+    line-height: 1.65;
+    transition: background .25s, color .25s;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(800px 500px at 10% -10%, rgba(96,165,250,0.10), transparent 60%),
+      radial-gradient(700px 400px at 90% 110%, rgba(129,140,248,0.10), transparent 60%);
+    pointer-events: none; z-index: -1;
+  }
+  html[data-theme="light"] body::before {
+    background:
+      radial-gradient(800px 500px at 10% -10%, rgba(37,99,235,0.07), transparent 60%),
+      radial-gradient(700px 400px at 90% 110%, rgba(99,102,241,0.07), transparent 60%);
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  /* ── Hero ── */
+  .hero { text-align: center; padding: 32px 0 20px; }
+  .hero .badge {
+    display: inline-block;
+    font-size: 11px; letter-spacing: .25em;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 999px;
+    padding: 4px 14px; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+  .hero p { color: var(--sub); font-size: 0.92rem; max-width: 600px; margin: 0 auto 18px; }
+  .stats { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-top: 8px; }
+  .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.7rem; color: var(--sub); letter-spacing: .12em; }
+
+  /* ── ツールバー（検索 + フィルタ + テーマ） ── */
+  .toolbar {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: 14px -16px 18px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar-row {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .search {
+    flex: 1; min-width: 0; position: relative;
+  }
+  .search input {
+    width: 100%;
+    background: var(--card); color: var(--text);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 11px 38px 11px 38px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--sub); font-size: 14px; pointer-events: none;
+  }
+  .search-clear {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: 0; color: var(--sub);
+    font-size: 16px; cursor: pointer; padding: 6px 8px; border-radius: 8px;
+    display: none;
+  }
+  .search-clear:hover { background: var(--bg-elev); color: var(--text); }
+  .search-clear.visible { display: inline-flex; align-items: center; }
+  .kbd-hint {
+    display: none; font-size: 10px; color: var(--sub);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 1px 6px; font-family: monospace;
+  }
+  @media (min-width: 720px) {
+    .search input { padding-right: 50px; }
+    .kbd-hint { display: inline-flex; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+    .search input:focus + .search-icon ~ .kbd-hint { display: none; }
+  }
+
+  .icon-btn {
+    background: var(--card); color: var(--text);
+    border: 1px solid var(--border); border-radius: 10px;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .15s, border-color .15s;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .icon-btn:hover { background: var(--card-hover); border-color: var(--accent); }
+  .icon-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .chips {
+    display: flex; gap: 6px; overflow-x: auto;
+    margin-top: 8px; padding: 2px 0; scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    background: var(--card); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 6px 14px; font-size: 0.8rem; cursor: pointer;
+    white-space: nowrap; transition: background .15s, border-color .15s;
+    user-select: none; flex-shrink: 0;
+  }
+  .chip:hover { background: var(--card-hover); border-color: var(--accent2); }
+  .chip[aria-pressed="true"] {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .chip-count { font-size: 0.7rem; opacity: .75; margin-left: 4px; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 0.75rem; letter-spacing: .3em; color: var(--accent2);
+    margin: 30px 0 12px; padding-left: 4px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .count { font-size: 0.65rem; color: var(--sub); letter-spacing: .15em; }
+
+  /* ── Card grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px 22px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative; overflow: hidden;
+    contain: layout;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background: var(--card-hover);
+    box-shadow: var(--shadow);
+  }
+  .card:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-card, #60a5fa), var(--accent-card2, #818cf8));
+  }
+  .card .icon { font-size: 2.1rem; line-height: 1; }
+  .card .title { font-size: 1.08rem; font-weight: 700; }
+  .card .desc { font-size: 0.82rem; color: var(--sub); flex: 1; line-height: 1.55; }
+  .card .meta {
+    display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.72rem;
+    color: var(--sub); padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .card .meta strong { color: var(--text); font-weight: 600; }
+  .card .arrow {
+    position: absolute; bottom: 18px; right: 16px;
+    color: var(--accent); font-size: 1.1rem; transition: transform .2s;
+  }
+  .card:hover .arrow { transform: translateX(4px); }
+
+  /* お気に入り星 */
+  .fav-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: transparent; border: 0;
+    color: var(--sub); font-size: 18px; cursor: pointer;
+    padding: 4px; border-radius: 6px; line-height: 1;
+    z-index: 1; transition: color .15s, transform .15s;
+  }
+  .fav-btn:hover { color: #fbbf24; transform: scale(1.15); }
+  .fav-btn[aria-pressed="true"] { color: #f59e0b; }
+
+  /* 最近開いたバッジ */
+  .recent-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--accent); color: #fff;
+    font-size: 9px; padding: 2px 6px; border-radius: 4px;
+    letter-spacing: .1em; font-weight: 700;
+  }
+
+  /* カードごとのアクセントカラー */
+  .card-fp { --accent-card: #f59e0b; --accent-card2: #fbbf24; }
+  .card-bk { --accent-card: #14b8a6; --accent-card2: #2dd4bf; }
+  .card-it { --accent-card: #a855f7; --accent-card2: #c084fc; }
+  .card-g  { --accent-card: #22c55e; --accent-card2: #4ade80; }
+  .card-spi{ --accent-card: #ef4444; --accent-card2: #f87171; }
+  .card-uni{ --accent-card: #3b82f6; --accent-card2: #60a5fa; }
+  .card-shi{ --accent-card: #8b5cf6; --accent-card2: #a78bfa; }
+  .card-tak{ --accent-card: #10b981; --accent-card2: #34d399; }
+  .card-fe { --accent-card: #6366f1; --accent-card2: #818cf8; }
+  .card-toeic{ --accent-card: #06b6d4; --accent-card2: #22d3ee; }
+  .card-kiken{ --accent-card: #f97316; --accent-card2: #fb923c; }
+  .card-ap { --accent-card: #3b82f6; --accent-card2: #60a5fa; }
+  .card-stat{ --accent-card: #a855f7; --accent-card2: #c084fc; }
+  .card-gyo{ --accent-card: #eab308; --accent-card2: #facc15; }
+  .card-aws{ --accent-card: #f97316; --accent-card2: #fb923c; }
+  .card-sho{ --accent-card: #16a34a; --accent-card2: #22c55e; }
+  .card-keiei{ --accent-card: #0ea5e9; --accent-card2: #38bdf8; }
+  .card-koumu{ --accent-card: #dc2626; --accent-card2: #f87171; }
+
+  /* 空状態 */
+  .empty {
+    text-align: center; padding: 60px 20px;
+    color: var(--sub); font-size: 0.9rem;
+  }
+  .empty .em-icon { font-size: 3rem; margin-bottom: 12px; opacity: .6; }
+  .empty .em-title { color: var(--text); font-weight: 700; margin-bottom: 6px; font-size: 1rem; }
+
+  /* 「ランダムでスタート」FAB */
+  .fab {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: 0; border-radius: 999px;
+    padding: 14px 22px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 10px 30px -8px rgba(96,165,250,.5);
+    cursor: pointer; z-index: 40;
+    display: flex; align-items: center; gap: 8px;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .fab:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 36px -10px rgba(96,165,250,.6); }
+  .fab:active { transform: translateY(0) scale(0.98); }
+
+  /* キーボードヘルプ */
+  .help-btn {
+    position: fixed;
+    bottom: calc(22px + env(safe-area-inset-bottom));
+    left: 20px;
+    background: var(--card); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px;
+    width: 36px; height: 36px;
+    cursor: pointer; z-index: 40;
+    font-family: monospace; font-weight: 700;
+    display: none;
+  }
+  @media (min-width: 720px) { .help-btn { display: flex; align-items: center; justify-content: center; } }
+
+  .help-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    z-index: 50; display: none; align-items: center; justify-content: center;
+    padding: 16px;
+    animation: fadeIn .15s ease-out;
+  }
+  .help-overlay.open { display: flex; }
+  .help-card {
+    background: var(--bg-elev); color: var(--text);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; max-width: 380px; width: 100%;
+    animation: zoomIn .15s ease-out;
+  }
+  .help-card h3 { margin-bottom: 4px; font-size: 1.1rem; }
+  .help-card .help-sub { color: var(--sub); font-size: 0.8rem; margin-bottom: 14px; }
+  .help-row { display: flex; justify-content: space-between; padding: 6px 0; align-items: center; font-size: 0.88rem; }
+  .help-row kbd {
+    font-family: monospace; font-size: 0.78rem;
+    border: 1px solid var(--border); background: var(--card);
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .help-close {
+    background: transparent; border: 0; color: var(--sub);
+    font-size: 20px; cursor: pointer; padding: 4px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes zoomIn { from { transform: scale(.95); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid var(--border); color: var(--sub); font-size: 0.78rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* レスポンシブ */
+  @media (max-width: 600px) {
+    .stats { gap: 18px; }
+    .stat-num { font-size: 1.3rem; }
+    .grid { grid-template-columns: 1fr; gap: 12px; }
+    .hero { padding: 24px 0 12px; }
+    .toolbar { margin-left: -12px; margin-right: -12px; padding: 10px 12px; }
+    .container { padding: 16px 12px 100px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="badge">STUDY PORTAL</div>
+    <h1>スキマ時間で<br>資格と受験を一気に。</h1>
+    <p>
+      FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで、
+      20の一問一答を1か所に集約。スマホひとつで通学・通勤の合間にトレーニング。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="stat-categories">20</div><div class="stat-label">CATEGORIES</div></div>
+      <div class="stat"><div class="stat-num" id="stat-questions">1315</div><div class="stat-label">QUESTIONS</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">FREE</div></div>
+    </div>
+  </header>
+
+  <!-- ── ツールバー ── -->
+  <div class="toolbar">
+    <div class="toolbar-row">
+      <div class="search">
+        <input id="search" type="search" placeholder="資格・キーワードで検索（例：簿記、AI、就活）"
+               aria-label="検索" autocomplete="off" />
+        <span class="search-icon">🔍</span>
+        <span class="kbd-hint">/</span>
+        <button class="search-clear" id="search-clear" aria-label="検索をクリア">×</button>
+      </div>
+      <button class="icon-btn" id="fav-only" aria-pressed="false" aria-label="お気に入りのみ表示" title="お気に入りのみ">⭐</button>
+      <button class="icon-btn" id="theme-toggle" aria-label="テーマ切替" title="テーマ切替（T）">🌙</button>
+    </div>
+    <div class="chips" role="tablist" aria-label="カテゴリフィルタ">
+      <button class="chip" role="tab" aria-pressed="true"  data-cat="all">すべて<span class="chip-count" id="count-all"></span></button>
+      <button class="chip" role="tab" aria-pressed="false" data-cat="biz">💼 ビジネス<span class="chip-count" id="count-biz"></span></button>
+      <button class="chip" role="tab" aria-pressed="false" data-cat="it">💻 IT・AI<span class="chip-count" id="count-it"></span></button>
+      <button class="chip" role="tab" aria-pressed="false" data-cat="lang">🌐 語学<span class="chip-count" id="count-lang"></span></button>
+      <button class="chip" role="tab" aria-pressed="false" data-cat="koka">🏛️ 国家資格<span class="chip-count" id="count-koka"></span></button>
+      <button class="chip" role="tab" aria-pressed="false" data-cat="exam">🎓 就活・受験<span class="chip-count" id="count-exam"></span></button>
+    </div>
+  </div>
+
+  <!-- 「最近開いた」セクション（JSで条件付き表示） -->
+  <section id="recent-section" hidden>
+    <p class="section-title">⏱️ 最近開いた <span class="count" id="recent-count"></span></p>
+    <div class="grid" id="recent-grid"></div>
+  </section>
+
+  <!-- ── ビジネス・経営 ── -->
+  <section data-cat="biz">
+    <p class="section-title">💼 ビジネス・経営 <span class="count">9 つの資格</span></p>
+    <div class="grid">
+      <a href="https://fp-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fp"
+         data-id="fp" data-keywords="fp3 ファイナンシャルプランナー お金 保険 税金 不動産 相続 ライフプラン">
+        <div class="icon">📊</div>
+        <div class="title">FP3級</div>
+        <div class="desc">ライフプラン・保険・資産運用・税金・不動産・相続。お金まわり全般の基礎。</div>
+        <div class="meta"><span><strong>120問</strong></span><span>6カテゴリ</span><span>初学者向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://bookkeeping-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
+         data-id="boki3" data-keywords="簿記 経理 会計 仕訳 決算 財務諸表">
+        <div class="icon">📒</div>
+        <div class="title">簿記3級</div>
+        <div class="desc">仕訳・勘定科目・財務諸表・決算処理。経理の基礎を一問一答で。</div>
+        <div class="meta"><span><strong>100問</strong></span><span>5カテゴリ</span><span>初学者向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://boki2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
+         data-id="boki2" data-keywords="簿記 商業簿記 工業簿記 中級">
+        <div class="icon">📕</div>
+        <div class="title">簿記2級</div>
+        <div class="desc">商業簿記・工業簿記。3級からのステップアップに。</div>
+        <div class="meta"><span><strong>50問</strong></span><span>中級</span><span>就活アピール</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://boki1-quiz.vercel.app" target="_blank" rel="noopener" class="card card-bk"
+         data-id="boki1" data-keywords="簿記 連結会計 原価計算 税効果会計 上級">
+        <div class="icon">📚</div>
+        <div class="title">簿記1級</div>
+        <div class="desc">連結会計・原価計算・税効果会計。最高峰の簿記資格。</div>
+        <div class="meta"><span><strong>35問</strong></span><span>上級</span><span>会計プロ向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://shindanshi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-shi"
+         data-id="shindanshi" data-keywords="中小企業診断士 経営 経済学 財務 経営理論 経営学部">
+        <div class="icon">📈</div>
+        <div class="title">中小企業診断士</div>
+        <div class="desc">経済学・財務会計・経営理論・運営管理・経営法務。経営コンサルの登竜門。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>5科目</span><span>経営学部向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://takken-drill.vercel.app" target="_blank" rel="noopener" class="card card-tak"
+         data-id="takken" data-keywords="宅建 不動産 権利関係 宅建業法 法令制限">
+        <div class="icon">🏘️</div>
+        <div class="title">宅建士</div>
+        <div class="desc">権利関係・宅建業法・法令制限・税。不動産・金融業界で重宝される国家資格。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>不動産系志望</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://gyousei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-gyo"
+         data-id="gyousei" data-keywords="行政書士 民法 行政法 憲法 商法 独立">
+        <div class="icon">⚖️</div>
+        <div class="title">行政書士</div>
+        <div class="desc">民法・行政法・憲法・商法。独立開業も可能な人気の国家資格。</div>
+        <div class="meta"><span><strong>50問</strong></span><span>4分野</span><span>独立志向</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://shoken2-quiz.vercel.app" target="_blank" rel="noopener" class="card card-sho"
+         data-id="shoken" data-keywords="証券外務員 金融商品 投資 株式 債券">
+        <div class="icon">📈</div>
+        <div class="title">証券外務員2種</div>
+        <div class="desc">金融商品・法令・経済。金融業界・投資の基礎を体系的に。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>投資・金融志望</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://keiei-quiz.vercel.app" target="_blank" rel="noopener" class="card card-keiei"
+         data-id="keiei" data-keywords="経営学 マネジメント 戦略 組織 会計 経営学部">
+        <div class="icon">🏢</div>
+        <div class="title">経営学検定</div>
+        <div class="desc">マネジメント・戦略・組織・会計。経営学部の基礎を一問一答で総ざらい。</div>
+        <div class="meta"><span><strong>50問</strong></span><span>4区分</span><span>経営学部直球</span></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── IT・AI ── -->
+  <section data-cat="it">
+    <p class="section-title">💻 IT・AI <span class="count">6 つの資格</span></p>
+    <div class="grid">
+      <a href="https://it-passport-quiz.vercel.app" target="_blank" rel="noopener" class="card card-it"
+         data-id="ipa" data-keywords="ITパスポート IT基礎 ストラテジ マネジメント テクノロジ 新社会人">
+        <div class="icon">🖥️</div>
+        <div class="title">ITパスポート</div>
+        <div class="desc">ストラテジ・マネジメント・テクノロジ。社会人なら知っておきたいIT基礎。</div>
+        <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>新社会人向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://kihonjouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-fe"
+         data-id="fe" data-keywords="基本情報技術者 fe アルゴリズム エンジニア IT就職">
+        <div class="icon">⚙️</div>
+        <div class="title">基本情報技術者</div>
+        <div class="desc">ITパスポートの上位。エンジニア入門の登竜門、3区分から出題。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>3区分</span><span>IT就職向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://oyojouhou-quiz.vercel.app" target="_blank" rel="noopener" class="card card-ap"
+         data-id="ap" data-keywords="応用情報技術者 ap IT中級">
+        <div class="icon">🧠</div>
+        <div class="title">応用情報技術者</div>
+        <div class="desc">基本情報の上位資格。テクノロジ・マネジメント・ストラテジを横断的に。</div>
+        <div class="meta"><span><strong>50問</strong></span><span>3区分</span><span>IT中級向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://aws-clf-quiz-pi.vercel.app" target="_blank" rel="noopener" class="card card-aws"
+         data-id="aws" data-keywords="AWS クラウド インフラ ec2 s3 cloud practitioner">
+        <div class="icon">☁️</div>
+        <div class="title">AWS Cloud Practitioner</div>
+        <div class="desc">AWS基礎・クラウド入門。IT系副業・インフラ就職で武器になる。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>クラウド入門</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://g-quiz-seven.vercel.app" target="_blank" rel="noopener" class="card card-g"
+         data-id="g" data-keywords="G検定 AI 機械学習 ディープラーニング 統計 倫理">
+        <div class="icon">🤖</div>
+        <div class="title">G検定</div>
+        <div class="desc">数学・統計、機械学習、ディープラーニング、AI倫理。AI時代の基礎教養。</div>
+        <div class="meta"><span><strong>100問</strong></span><span>5分野</span><span>AI入門者向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://toukei3-quiz.vercel.app" target="_blank" rel="noopener" class="card card-stat"
+         data-id="toukei3" data-keywords="統計検定 統計 確率 データ分析 推測統計">
+        <div class="icon">📊</div>
+        <div class="title">統計検定3級</div>
+        <div class="desc">記述統計・確率・推測統計。データ分析・経営学・AIの土台になる必修知識。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>3分野</span><span>データ分析入門</span></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 語学 ── -->
+  <section data-cat="lang">
+    <p class="section-title">🌐 語学 <span class="count">1 つの試験</span></p>
+    <div class="grid">
+      <a href="https://toeic-drill.vercel.app" target="_blank" rel="noopener" class="card card-toeic"
+         data-id="toeic" data-keywords="TOEIC 英語 リスニング リーディング 単語 文法 就活 昇進">
+        <div class="icon">🌐</div>
+        <div class="title">TOEIC</div>
+        <div class="desc">単語・文法・短文読解・リスニング基礎。就活と昇進で必須の英語スコア。</div>
+        <div class="meta"><span><strong>40問</strong></span><span>4分野</span><span>就活・昇進</span></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 国家資格 ── -->
+  <section data-cat="koka">
+    <p class="section-title">🏛️ 国家資格（その他） <span class="count">1 つの資格</span></p>
+    <div class="grid">
+      <a href="https://kikenbutu-quiz.vercel.app" target="_blank" rel="noopener" class="card card-kiken"
+         data-id="kiken" data-keywords="危険物 乙4 ガソリンスタンド 法令 物理化学 国家資格">
+        <div class="icon">⛽</div>
+        <div class="title">危険物乙4</div>
+        <div class="desc">法令・物理化学・性質と消火。ガソリンスタンドで必須の国家資格。</div>
+        <div class="meta"><span><strong>30問</strong></span><span>3分野</span><span>就職に有利</span></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 就活・受験 ── -->
+  <section data-cat="exam">
+    <p class="section-title">🎓 就活・受験 <span class="count">3 つ</span></p>
+    <div class="grid">
+      <a href="https://spi-quiz.vercel.app" target="_blank" rel="noopener" class="card card-spi"
+         data-id="spi" data-keywords="SPI 適性検査 言語 非言語 性格 就活">
+        <div class="icon">📝</div>
+        <div class="title">SPI</div>
+        <div class="desc">言語・非言語・性格適性。新卒就活で最頻出の適性検査対策。</div>
+        <div class="meta"><span><strong>100問</strong></span><span>3分野</span><span>就活生向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://daigaku-quiz.vercel.app" target="_blank" rel="noopener" class="card card-uni"
+         data-id="daigaku" data-keywords="大学受験 共通テスト 英語 数学 国語 理科 社会 高校">
+        <div class="icon">🎓</div>
+        <div class="title">大学受験</div>
+        <div class="desc">英語・数学・国語・理科基礎・社会。共通テスト基礎レベルを5教科横断で。</div>
+        <div class="meta"><span><strong>200問</strong></span><span>5教科</span><span>高校生向け</span></div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://koumuin-quiz.vercel.app" target="_blank" rel="noopener" class="card card-koumu"
+         data-id="koumuin" data-keywords="公務員 一般教養 数的処理 文章理解 自然 人文 就活">
+        <div class="icon">🏛️</div>
+        <div class="title">公務員試験 一般教養</div>
+        <div class="desc">数的処理・文章理解・社会・人文・自然。就活保険にも使える教養対策。</div>
+        <div class="meta"><span><strong>50問</strong></span><span>5区分</span><span>就活・公務員志望</span></div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 検索結果なし -->
+  <div class="empty" id="empty-state" hidden>
+    <div class="em-icon">🔎</div>
+    <p class="em-title">該当するクイズが見つかりません</p>
+    <p>検索ワードを変えるか、カテゴリを「すべて」に戻してみてください。</p>
+  </div>
+
+  <footer>
+    <p>© 2026 manabi-quiz — 学習ポータル</p>
+    <p style="margin-top:8px">合計 <strong id="footer-q">1,315</strong> 問・<strong id="footer-c">20</strong> 資格</p>
+  </footer>
+</div>
+
+<!-- ランダム挑戦 FAB -->
+<button class="fab" id="fab-random" aria-label="ランダムでクイズを開く">🎲 ランダムで挑戦</button>
+<button class="help-btn" id="help-btn" aria-label="キーボードショートカット">?</button>
+
+<!-- キーボードヘルプ -->
+<div class="help-overlay" id="help" role="dialog" aria-modal="true" aria-label="キーボードショートカット">
+  <div class="help-card">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
+      <div>
+        <h3>キーボードショートカット</h3>
+        <p class="help-sub">入力欄以外でキーを押すと動きます</p>
+      </div>
+      <button class="help-close" id="help-close" aria-label="閉じる">×</button>
+    </div>
+    <div class="help-row"><span>検索にフォーカス</span><kbd>/</kbd></div>
+    <div class="help-row"><span>テーマ切替</span><kbd>T</kbd></div>
+    <div class="help-row"><span>お気に入りのみ表示</span><kbd>F</kbd></div>
+    <div class="help-row"><span>ランダムでクイズを開く</span><kbd>R</kbd></div>
+    <div class="help-row"><span>クリア／閉じる</span><kbd>Esc</kbd></div>
+    <div class="help-row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:10px"><span>このダイアログを開く</span><kbd>?</kbd></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const LS_THEME  = 'study-portal-theme';
+  const LS_FAVS   = 'study-portal-favorites';
+  const LS_RECENT = 'study-portal-recent';
+
+  // ── テーマ ───────────────────────────────────────────────
+  const themeBtn = document.getElementById('theme-toggle');
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    themeBtn.textContent = t === 'dark' ? '🌙' : '☀️';
+    document.querySelector('meta[name="theme-color"]').setAttribute(
+      'content', t === 'dark' ? '#0b0f1e' : '#f8fafc'
+    );
+  }
+  let theme = localStorage.getItem(LS_THEME);
+  if (!theme) theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  applyTheme(theme);
+  themeBtn.addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(LS_THEME, theme);
+    applyTheme(theme);
+  });
+
+  // ── お気に入り ───────────────────────────────────────────
+  const favs = new Set(JSON.parse(localStorage.getItem(LS_FAVS) || '[]'));
+  function saveFavs(){ localStorage.setItem(LS_FAVS, JSON.stringify(Array.from(favs))); }
+
+  document.querySelectorAll('.card[data-id]').forEach((card) => {
+    const id = card.dataset.id;
+    const btn = document.createElement('button');
+    btn.className = 'fav-btn';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'お気に入りに追加/解除');
+    btn.setAttribute('aria-pressed', favs.has(id) ? 'true' : 'false');
+    btn.textContent = favs.has(id) ? '★' : '☆';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (favs.has(id)) { favs.delete(id); btn.setAttribute('aria-pressed','false'); btn.textContent='☆'; }
+      else              { favs.add(id);    btn.setAttribute('aria-pressed','true');  btn.textContent='★'; }
+      saveFavs();
+      if (favOnly) applyFilter();
+    });
+    card.appendChild(btn);
+  });
+
+  // ── 最近開いた ────────────────────────────────────────────
+  let recent = JSON.parse(localStorage.getItem(LS_RECENT) || '[]'); // 最大6件のid配列
+  function saveRecent(){ localStorage.setItem(LS_RECENT, JSON.stringify(recent)); }
+
+  document.querySelectorAll('.card[data-id]').forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      recent = [id, ...recent.filter((x) => x !== id)].slice(0, 6);
+      saveRecent();
+      // すぐは表示更新しない（戻ってきたときに見える）
+    });
+  });
+
+  function renderRecent(){
+    const sec = document.getElementById('recent-section');
+    const grid = document.getElementById('recent-grid');
+    grid.innerHTML = '';
+    const ids = recent.filter((id) => document.querySelector(`.card[data-id="${id}"]`));
+    if (ids.length === 0) { sec.hidden = true; return; }
+    sec.hidden = false;
+    document.getElementById('recent-count').textContent = `${ids.length} 件`;
+    ids.forEach((id) => {
+      const orig = document.querySelector(`.card[data-id="${id}"]`);
+      const clone = orig.cloneNode(true);
+      // 「最近」バッジを追加
+      const tag = document.createElement('span');
+      tag.className = 'recent-badge';
+      tag.textContent = 'RECENT';
+      clone.appendChild(tag);
+      // クローンのfavボタンも独立して動かすため再ハンドリング
+      const fav = clone.querySelector('.fav-btn');
+      if (fav) fav.replaceWith(fav.cloneNode(true));
+      const fav2 = clone.querySelector('.fav-btn');
+      fav2.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        if (favs.has(id)) { favs.delete(id); }
+        else              { favs.add(id);    }
+        saveFavs();
+        renderAllFavStates();
+        if (favOnly) applyFilter();
+      });
+      // クリックで recent 更新
+      clone.addEventListener('click', () => {
+        recent = [id, ...recent.filter((x) => x !== id)].slice(0, 6);
+        saveRecent();
+      });
+      grid.appendChild(clone);
+    });
+  }
+  function renderAllFavStates(){
+    document.querySelectorAll('.card[data-id]').forEach((card) => {
+      const id = card.dataset.id;
+      card.querySelectorAll('.fav-btn').forEach((b) => {
+        const on = favs.has(id);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.textContent = on ? '★' : '☆';
+      });
+    });
+  }
+  renderRecent();
+
+  // ── カテゴリ別カウント ─────────────────────────────────────
+  const catCount = { all: 0, biz: 0, it: 0, lang: 0, koka: 0, exam: 0 };
+  document.querySelectorAll('section[data-cat]').forEach((s) => {
+    const c = s.dataset.cat;
+    const n = s.querySelectorAll('.card[data-id]').length;
+    catCount[c] = n;
+    catCount.all += n;
+  });
+  Object.entries(catCount).forEach(([k, v]) => {
+    const el = document.getElementById(`count-${k}`);
+    if (el) el.textContent = v ? `（${v}）` : '';
+  });
+
+  // ── 検索 + カテゴリ + お気に入り フィルタ ──────────────────
+  const searchInput = document.getElementById('search');
+  const searchClear = document.getElementById('search-clear');
+  const favOnlyBtn  = document.getElementById('fav-only');
+  const emptyEl     = document.getElementById('empty-state');
+  let q = '';
+  let activeCat = 'all';
+  let favOnly = false;
+
+  function applyFilter(){
+    const qq = q.trim().toLowerCase();
+    let visible = 0;
+    let visibleByCat = { biz: 0, it: 0, lang: 0, koka: 0, exam: 0 };
+
+    document.querySelectorAll('section[data-cat]').forEach((sec) => {
+      const cat = sec.dataset.cat;
+      const cards = sec.querySelectorAll('.card[data-id]');
+      let shownInSec = 0;
+      cards.forEach((card) => {
+        const id = card.dataset.id;
+        const txt = (card.textContent + ' ' + (card.dataset.keywords || '')).toLowerCase();
+        const matchQ   = !qq || txt.includes(qq);
+        const matchCat = activeCat === 'all' || activeCat === cat;
+        const matchFav = !favOnly || favs.has(id);
+        const show = matchQ && matchCat && matchFav;
+        card.style.display = show ? '' : 'none';
+        if (show) { shownInSec++; visible++; visibleByCat[cat]++; }
+      });
+      sec.style.display = shownInSec === 0 ? 'none' : '';
+    });
+
+    emptyEl.hidden = visible !== 0;
+    searchClear.classList.toggle('visible', !!qq);
+  }
+
+  searchInput.addEventListener('input', (e) => { q = e.target.value; applyFilter(); });
+  searchClear.addEventListener('click', () => { searchInput.value = ''; q = ''; applyFilter(); searchInput.focus(); });
+
+  document.querySelectorAll('.chip[data-cat]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      activeCat = chip.dataset.cat;
+      document.querySelectorAll('.chip[data-cat]').forEach((c) => c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'));
+      applyFilter();
+    });
+  });
+
+  favOnlyBtn.addEventListener('click', () => {
+    favOnly = !favOnly;
+    favOnlyBtn.setAttribute('aria-pressed', favOnly ? 'true' : 'false');
+    applyFilter();
+  });
+
+  // ── ランダム挑戦 ─────────────────────────────────────────
+  const fab = document.getElementById('fab-random');
+  fab.addEventListener('click', () => {
+    const cards = document.querySelectorAll('.card[data-id]');
+    const visible = Array.from(cards).filter((c) => c.style.display !== 'none');
+    const pool = visible.length > 0 ? visible : Array.from(cards);
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    if (pick) {
+      pick.click();
+      window.open(pick.href, '_blank', 'noopener');
+    }
+  });
+
+  // ── キーボードショートカット ───────────────────────────────
+  const helpBtn   = document.getElementById('help-btn');
+  const helpEl    = document.getElementById('help');
+  const helpClose = document.getElementById('help-close');
+  function openHelp(){ helpEl.classList.add('open'); }
+  function closeHelp(){ helpEl.classList.remove('open'); }
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpEl.addEventListener('click', (e) => { if (e.target === helpEl) closeHelp(); });
+
+  function isTyping(el){
+    if (!el) return false;
+    const tag = el.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    // Escape はどこにいても効く
+    if (e.key === 'Escape') {
+      if (helpEl.classList.contains('open')) { e.preventDefault(); closeHelp(); return; }
+      if (document.activeElement === searchInput && searchInput.value) {
+        searchInput.value = ''; q = ''; applyFilter();
+      } else {
+        searchInput.blur();
+      }
+      return;
+    }
+    if (isTyping(e.target)) return;
+    if (e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); openHelp(); return; }
+    if (e.key === '/') { e.preventDefault(); searchInput.focus(); searchInput.select(); return; }
+    const k = e.key.toLowerCase();
+    if (k === 't') { e.preventDefault(); themeBtn.click(); return; }
+    if (k === 'f') { e.preventDefault(); favOnlyBtn.click(); return; }
+    if (k === 'r') { e.preventDefault(); fab.click(); return; }
+  });
+
+  // ── 初期化 ─────────────────────────────────────────────
+  applyFilter();
+})();
+</script>
+</body>
+</html>

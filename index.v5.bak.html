@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>manabi-quiz — 1問1分の、資格学習。</title>
+<meta name="description" content="FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで18の一問一答クイズ。 全1,215問・無料・登録不要。 高校生・大学生のための学習ハブ。">
+<meta name="theme-color" content="#F5F1EB">
+<meta property="og:title" content="manabi-quiz — 1問1分の、資格学習。">
+<meta property="og:description" content="18の資格クイズ・全1,215問。 無料・登録不要・スキマ時間で。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23F5F1EB'/%3E%3Cline x1='25' y1='75' x2='75' y2='25' stroke='%23121212' stroke-width='8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper:    #F5F1EB;
+    --paper-2:  #ECE6DC;
+    --card:     #FFFFFF;
+    --ink:      #121212;
+    --ink-2:    #4A4A4A;
+    --ink-3:    #8A857C;
+    --line:     #DCD5C7;
+    --line-2:   #C4BCAC;
+    --accent:   #C2410C;
+    --accent-2: #E5E0D5;
+  }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-feature-settings: "palt", "ss01";
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+  ::selection { background: var(--accent); color: var(--paper); }
+
+  /* ヘッダー */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(245,241,235,0.86);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    font-family: "Fraunces", serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo .mark {
+    width: 24px; height: 24px;
+    position: relative;
+  }
+  .nav-logo .mark::before, .nav-logo .mark::after {
+    content: ""; position: absolute;
+    left: 11px; top: 0; width: 2px; height: 24px;
+    background: var(--ink);
+  }
+  .nav-logo .mark::before { transform: rotate(45deg); }
+  .nav-logo .mark::after { transform: rotate(-45deg); }
+  .nav-stats { display: flex; gap: 24px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav-stats span strong { color: var(--ink); font-weight: 600; }
+  @media (max-width: 768px) { .nav-stats { display: none; } }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 768px) { .container { padding: 0 20px; } }
+
+  /* ====== HERO ====== */
+  .hero {
+    padding: 120px 0 100px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 36px;
+  }
+  .hero-eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--ink-3); }
+
+  .hero h1 {
+    font-family: "Fraunces", "Noto Sans JP", serif;
+    font-size: clamp(48px, 8vw, 124px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+    color: var(--ink);
+    max-width: 1000px;
+    margin-bottom: 36px;
+  }
+  .hero h1 em { font-style: italic; font-weight: 600; color: var(--ink-2); }
+
+  .hero p {
+    font-size: 18px; line-height: 1.75;
+    max-width: 580px;
+    color: var(--ink-2);
+    margin-bottom: 48px;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ink); color: var(--paper);
+    padding: 16px 24px;
+    font-weight: 500; font-size: 15px;
+    border: 1px solid var(--ink);
+    transition: opacity .15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    padding: 16px 22px;
+    font-weight: 500; font-size: 15px;
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    transition: border-color .15s, background .15s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); background: var(--card); }
+
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    margin-top: 96px;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+  }
+  @media (max-width: 768px) { .hero-meta { grid-template-columns: repeat(2, 1fr); gap: 24px 0; } }
+  .meta-item .v { font-family: "Fraunces", serif; font-size: 38px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+  .meta-item .l { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* セクション */
+  section { position: relative; padding: 120px 0; }
+  .section-head {
+    display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: end;
+    margin-bottom: 56px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 768px) { .section-head { grid-template-columns: 1fr; gap: 20px; } }
+  .section-num { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.16em; color: var(--ink-3); margin-bottom: 16px; text-transform: uppercase; }
+  .section-title { font-family: "Fraunces", "Noto Sans JP", serif; font-size: clamp(36px, 5.5vw, 72px); line-height: 0.95; letter-spacing: -0.04em; font-weight: 600; }
+  .section-meta {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    padding-bottom: 10px;
+  }
+  @media (max-width: 768px) { .section-meta { text-align: left; } }
+  .section-meta strong { color: var(--ink); font-weight: 600; }
+
+  /* クイズリスト */
+  .quiz-list { display: grid; grid-template-columns: 1fr; gap: 0; }
+  .qrow {
+    display: grid;
+    grid-template-columns: 64px 1fr 200px 100px;
+    gap: 32px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    align-items: center;
+    transition: padding-left .25s ease, border-color .15s;
+    position: relative;
+  }
+  @media (max-width: 768px) {
+    .qrow { grid-template-columns: 50px 1fr; gap: 16px; padding: 20px 0; }
+    .qrow .qmeta { display: none; }
+    .qrow .qcta { grid-column: 2; justify-self: start; margin-top: 4px; }
+  }
+  .qrow:last-child { border-bottom: 1px solid var(--line); }
+  .qrow:hover { padding-left: 12px; }
+  .qrow.visited::before, .qrow:focus-within::before {
+    content: ""; position: absolute; left: -16px; top: 28px; bottom: 28px;
+    width: 3px; background: var(--accent);
+  }
+  @media (max-width: 768px) {
+    .qrow.visited::before, .qrow:focus-within::before { left: -8px; top: 20px; bottom: 20px; }
+  }
+  .qnum { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--ink-3); letter-spacing: 0.06em; }
+  .qrow.visited .qnum { color: var(--accent); }
+  .qbody h4 { font-family: "Fraunces", "Noto Sans JP", serif; font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -0.02em; line-height: 1.15; font-weight: 600; margin-bottom: 6px; }
+  .qbody .qdesc { font-size: 14px; color: var(--ink-2); line-height: 1.65; max-width: 520px; }
+  .qbody .qtag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 10px; text-transform: uppercase; }
+  .qmeta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; line-height: 1.8; }
+  .qmeta .row { display: flex; justify-content: space-between; }
+  .qmeta .row span:last-child { color: var(--ink); }
+  .qcta { font-size: 13px; font-weight: 500; color: var(--ink-3); transition: color .15s; }
+  .qrow:hover .qcta { color: var(--ink); }
+  .qrow.visited .qcta { color: var(--accent); }
+  .qcta::after { content: " →"; transition: transform .15s; display: inline-block; }
+  .qrow:hover .qcta::after { transform: translateX(4px); }
+
+  /* 進捗バンド */
+  .progress {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 0;
+  }
+  .progress .grid { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+  @media (max-width: 768px) { .progress .grid { grid-template-columns: 1fr; gap: 24px; } }
+  .progress h3 { font-family: "Fraunces", serif; font-size: clamp(24px, 3.5vw, 40px); letter-spacing: -0.02em; font-weight: 600; line-height: 1.25; }
+  .progress h3 em { font-style: italic; color: var(--accent-2); }
+  .progress .stats { display: flex; gap: 40px; font-family: "JetBrains Mono", monospace; }
+  .progress .stat { text-align: right; }
+  @media (max-width: 768px) { .progress .stat { text-align: left; } .progress .stats { gap: 32px; flex-wrap: wrap; } }
+  .progress .stat .v { font-family: "Fraunces", serif; font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+  .progress .stat .l { font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+
+  /* CTA */
+  .cta { padding: 120px 0; }
+  .cta-inner { text-align: center; max-width: 720px; margin: 0 auto; }
+  .cta h2 { font-family: "Fraunces", "Noto Sans JP", serif; font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.03em; font-weight: 600; line-height: 1.2; margin-bottom: 24px; }
+  .cta p { font-size: 17px; color: var(--ink-2); margin-bottom: 32px; }
+
+  /* フッター */
+  footer { background: var(--paper); padding: 60px 0 32px; border-top: 1px solid var(--line); }
+  .foot-bottom {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em;
+  }
+  .foot-bottom a { color: var(--ink-2); }
+  .foot-bottom a:hover { color: var(--ink); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s, transform .8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a href="#" class="nav-logo">
+    <span class="mark"></span>
+    <span>manabi-quiz</span>
+  </a>
+  <div class="nav-stats">
+    <span><strong>18</strong> APPS</span>
+    <span><strong>1,215</strong> QUESTIONS</span>
+    <span><strong>FREE</strong></span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">FOR HIGH SCHOOL & UNIVERSITY STUDENTS</div>
+    <h1>1問1分の、<em>資格学習</em>。</h1>
+    <p>
+      FP3級・簿記・ITパスポート・G検定・SPI・大学受験まで。<br>
+      18の一問一答クイズが全部無料。 通学中の1問だけでも、続ければ積み上がる。
+    </p>
+    <div class="hero-ctas">
+      <a href="#categories" class="btn-primary">クイズ一覧を見る</a>
+      <a href="#about" class="btn-ghost">使い方を読む</a>
+    </div>
+
+    <div class="hero-meta">
+      <div class="meta-item"><div class="v">18</div><div class="l">Quiz apps</div></div>
+      <div class="meta-item"><div class="v">1,215</div><div class="l">Questions</div></div>
+      <div class="meta-item"><div class="v">¥0</div><div class="l">Free forever</div></div>
+      <div class="meta-item"><div class="v">1分</div><div class="l">Per quiz</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 就活・受験 -->
+<section id="categories">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-num">01 — Job-hunting & Entrance exam</div>
+        <h2 class="section-title">就活・受験</h2>
+      </div>
+      <div class="section-meta"><strong>3 apps</strong><br>340 questions</div>
+    </div>
+
+    <div class="quiz-list">
+      <a class="qrow" href="https://daigaku-quiz.vercel.app">
+        <div class="qnum">01</div>
+        <div class="qbody">
+          <span class="qtag">UNIVERSITY EXAM</span>
+          <h4>大学受験</h4>
+          <p class="qdesc">英語・数学・国語・理科・社会。 共通テスト基礎レベル200問。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>200</span></div><div class="row"><span>Subjects</span><span>5</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://spi-quiz.vercel.app">
+        <div class="qnum">02</div>
+        <div class="qbody">
+          <span class="qtag">SPI</span>
+          <h4>SPI 対策</h4>
+          <p class="qdesc">言語・非言語・性格適性。 就活前に押さえる定番。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>100</span></div><div class="row"><span>Subjects</span><span>3</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://it-passport-quiz.vercel.app">
+        <div class="qnum">03</div>
+        <div class="qbody">
+          <span class="qtag">IT PASSPORT</span>
+          <h4>ITパスポート</h4>
+          <p class="qdesc">ストラテジ・マネジメント・テクノロジ全範囲。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>100</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ビジネス資格 -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-num">02 — Business license</div>
+        <h2 class="section-title">ビジネス資格</h2>
+      </div>
+      <div class="section-meta"><strong>8 apps</strong><br>475 questions</div>
+    </div>
+
+    <div class="quiz-list">
+      <a class="qrow" href="https://fp-quiz.vercel.app">
+        <div class="qnum">01</div>
+        <div class="qbody">
+          <span class="qtag">FINANCIAL PLANNING</span>
+          <h4>FP 3級</h4>
+          <p class="qdesc">6カテゴリの基礎120問。 最初の金融資格として定番。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>120</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://bookkeeping-quiz.vercel.app">
+        <div class="qnum">02</div>
+        <div class="qbody">
+          <span class="qtag">BOOKKEEPING</span>
+          <h4>簿記 3級</h4>
+          <p class="qdesc">仕訳・勘定科目・財務諸表・決算処理。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>100</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://boki2-quiz.vercel.app">
+        <div class="qnum">03</div>
+        <div class="qbody">
+          <span class="qtag">BOOKKEEPING</span>
+          <h4>簿記 2級</h4>
+          <p class="qdesc">商業・工業簿記。 3級の次のステップ。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>50</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://boki1-quiz.vercel.app">
+        <div class="qnum">04</div>
+        <div class="qbody">
+          <span class="qtag">BOOKKEEPING</span>
+          <h4>簿記 1級</h4>
+          <p class="qdesc">最上位レベル。 会計・原価計算の応用。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>35</span></div><div class="row"><span>Level</span><span>Advanced</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://shindanshi-quiz.vercel.app">
+        <div class="qnum">05</div>
+        <div class="qbody">
+          <span class="qtag">CONSULTANT</span>
+          <h4>中小企業診断士</h4>
+          <p class="qdesc">経営戦略・組織・財務・運営管理の頻出。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://takken-drill.vercel.app">
+        <div class="qnum">06</div>
+        <div class="qbody">
+          <span class="qtag">REAL ESTATE</span>
+          <h4>宅建士</h4>
+          <p class="qdesc">権利関係・宅建業法・法令上の制限。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://gyousei-quiz.vercel.app">
+        <div class="qnum">07</div>
+        <div class="qbody">
+          <span class="qtag">LAW</span>
+          <h4>行政書士</h4>
+          <p class="qdesc">憲法・民法・行政法の基礎50問。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>50</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://shoken2-quiz.vercel.app">
+        <div class="qnum">08</div>
+        <div class="qbody">
+          <span class="qtag">FINANCE</span>
+          <h4>証券外務員 2種</h4>
+          <p class="qdesc">株式・債券・投資信託の基礎。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- IT・AI -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-num">03 — IT & AI</div>
+        <h2 class="section-title">IT・AI</h2>
+      </div>
+      <div class="section-meta"><strong>5 apps</strong><br>270 questions</div>
+    </div>
+
+    <div class="quiz-list">
+      <a class="qrow" href="https://kihonjouhou-quiz.vercel.app">
+        <div class="qnum">01</div>
+        <div class="qbody">
+          <span class="qtag">IT ENGINEER</span>
+          <h4>基本情報技術者</h4>
+          <p class="qdesc">アルゴリズム・ネットワーク・DB・セキュリティ。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://oyojouhou-quiz.vercel.app">
+        <div class="qnum">02</div>
+        <div class="qbody">
+          <span class="qtag">IT ENGINEER</span>
+          <h4>応用情報技術者</h4>
+          <p class="qdesc">基本情報の上位。 マネジメント領域も。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>50</span></div><div class="row"><span>Level</span><span>Advanced</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://aws-clf-quiz-pi.vercel.app">
+        <div class="qnum">03</div>
+        <div class="qbody">
+          <span class="qtag">AWS CLOUD</span>
+          <h4>AWS CLF</h4>
+          <p class="qdesc">Cloud Practitioner 入門レベル。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://g-quiz-seven.vercel.app">
+        <div class="qnum">04</div>
+        <div class="qbody">
+          <span class="qtag">DEEP LEARNING</span>
+          <h4>G 検定</h4>
+          <p class="qdesc">機械学習・ディープラーニング・AI 倫理。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>100</span></div><div class="row"><span>Level</span><span>Intermediate</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://toukei3-quiz.vercel.app">
+        <div class="qnum">05</div>
+        <div class="qbody">
+          <span class="qtag">STATISTICS</span>
+          <h4>統計検定 3級</h4>
+          <p class="qdesc">確率・分布・推定・検定の基礎。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 語学・国家資格 -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-num">04 — Language & National license</div>
+        <h2 class="section-title">語学・国家資格</h2>
+      </div>
+      <div class="section-meta"><strong>2 apps</strong><br>70 questions</div>
+    </div>
+
+    <div class="quiz-list">
+      <a class="qrow" href="https://toeic-drill.vercel.app">
+        <div class="qnum">01</div>
+        <div class="qbody">
+          <span class="qtag">ENGLISH</span>
+          <h4>TOEIC ドリル</h4>
+          <p class="qdesc">頻出単語・文法・リーディング基礎。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>40</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+      <a class="qrow" href="https://kikenbutu-quiz.vercel.app">
+        <div class="qnum">02</div>
+        <div class="qbody">
+          <span class="qtag">SAFETY LICENSE</span>
+          <h4>危険物乙4</h4>
+          <p class="qdesc">物理化学・性質消火・法令の基礎。</p>
+        </div>
+        <div class="qmeta"><div class="row"><span>Questions</span><span>30</span></div><div class="row"><span>Level</span><span>Entry</span></div></div>
+        <div class="qcta">解く</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 進捗バンド -->
+<section class="progress" id="about">
+  <div class="container">
+    <div class="grid">
+      <h3>続けた人だけが、<em>変わる</em>。<br>1問だけでも、毎日の積み上げに。</h3>
+      <div class="stats">
+        <div class="stat"><div class="v" id="visitedCount">0</div><div class="l">Apps started</div></div>
+        <div class="stat"><div class="v">18</div><div class="l">Total apps</div></div>
+        <div class="stat"><div class="v">1,215</div><div class="l">Total questions</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>1問だけ、解いてみよう。</h2>
+      <p>登録なし。 課金なし。 広告なし。 続くか分からない人も、まず1問から。</p>
+      <a href="https://fp-quiz.vercel.app" class="btn-primary">人気の FP 3級ではじめる</a>
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <div class="container">
+    <div class="foot-bottom">
+      <span>© 2026 MANABI-QUIZ · BUILT WITH CLAUDE CODE</span>
+      <span><a href="https://saas-lab-eight.vercel.app/">運営: SAAS LAB</a> · <a href="mailto:shimizu.kouki.business@gmail.com">CONTACT</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const VISIT_KEY = "manabi_visited_v1";
+  const visited = new Set(JSON.parse(localStorage.getItem(VISIT_KEY) || "[]"));
+
+  document.querySelectorAll(".qrow").forEach((row) => {
+    const url = row.getAttribute("href");
+    if (visited.has(url)) row.classList.add("visited");
+    row.addEventListener("click", () => {
+      visited.add(url);
+      localStorage.setItem(VISIT_KEY, JSON.stringify([...visited]));
+      row.classList.add("visited");
+      document.getElementById("visitedCount").textContent = visited.size;
+    });
+  });
+
+  document.getElementById("visitedCount").textContent = visited.size;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+</body>
+</html>
